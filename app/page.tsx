@@ -14,7 +14,6 @@ export default function HomePage() {
     series: p.series,
     ip: p.ip,
     image: p.images[0]?.url ?? null,
-    libraries: p.libraries.length,
   }));
   const sections = SECTIONS.map((s) => ({
     ...s,
@@ -24,23 +23,26 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <section className="relative isolate overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/hero.jpg" alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-45" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-950/30 via-navy-950/70 to-navy-950" />
-        <div className="mx-auto max-w-7xl px-4 pb-14 pt-16 sm:px-6 sm:pb-20 sm:pt-24">
-          <p className="eyebrow">2027 Collection</p>
-          <h1 className="mt-3 max-w-3xl font-display text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-6xl">
-            Stage lighting,<br />
-            <span className="text-amber-brand">built to perform.</span>
-          </h1>
-          <p className="mt-5 max-w-xl text-base text-navy-200 sm:text-lg">
-            {items.length} fixtures across {sections.length} categories. Open any product for full specifications,
-            console libraries and an instant quote.
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/hero.jpg" alt="" className="h-48 w-full object-cover sm:h-72 lg:h-80" />
+      <section className="mx-auto max-w-6xl px-4 pb-8 pt-8 sm:px-6 sm:pt-12">
+        <h1 className="text-5xl leading-[0.95] tracking-tight text-ink sm:text-7xl">
+          Product
+          <br />
+          Catalog
+        </h1>
+        <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
+          <p className="text-base font-bold leading-tight text-ink">
+            2027
+            <br />
+            Collection
+          </p>
+          <p className="text-sm text-grey">
+            {items.length} fixtures · {sections.length} sections · prices on request
           </p>
         </div>
       </section>
-      <main className="mx-auto max-w-7xl px-4 sm:px-6">
+      <main className="mx-auto max-w-6xl px-4 sm:px-6">
         <CatalogBrowser items={items} sections={sections} />
       </main>
       <SiteFooter />

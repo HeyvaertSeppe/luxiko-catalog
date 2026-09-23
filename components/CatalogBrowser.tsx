@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
-import { SearchIcon, XIcon } from "./icons";
+import { SearchIcon } from "./icons";
 
 export type CatalogItem = {
   code: string;
@@ -11,7 +11,6 @@ export type CatalogItem = {
   series: "B" | "S" | "P" | null;
   ip: string;
   image: string | null;
-  libraries: number;
 };
 
 const SERIES = [
@@ -22,6 +21,19 @@ const SERIES = [
 
 function normalize(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function Filter({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`caps shrink-0 cursor-pointer border-b-2 pb-1 text-[11px] transition-colors ${
+        active ? "border-orange text-navy" : "border-transparent text-grey hover:text-navy"
+      }`}
+    >
+      {children}
+    </button>
+  );
 }
 
 export function CatalogBrowser({
@@ -43,8 +55,7 @@ export function CatalogBrowser({
       if (section && i.section !== section) return false;
       if (series && i.series !== series) return false;
       if (outdoor && !/IP5|IP6|OUTDOOR/.test(i.ip)) return false;
-      if (!nq) return true;
-      return normalize(`${i.code} ${i.name} ${i.section} ${i.ip}`).includes(nq);
+      return !nq || normalize(`${i.code} ${i.name} ${i.section} ${i.ip}`).includes(nq);
     });
   }, [items, q, section, series, outdoor]);
 
@@ -57,120 +68,77 @@ export function CatalogBrowser({
     return [...map.entries()];
   }, [filtered]);
 
-  const active = Boolean(query || section || series || outdoor);
-
   return (
-    <div className="-mt-6 sm:-mt-8">
-      <div className="sticky top-16 z-30 -mx-4 bg-navy-950/85 px-4 pb-3 pt-3 backdrop-blur-xl sm:-mx-6 sm:px-6">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
+    <div>
+      <div className="sticky top-16 z-30 border-y border-line bg-white py-4 sm:top-20">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center">
           <label className="relative flex-1">
             <span className="sr-only">Search products</span>
-            <SearchIcon className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-navy-300" />
+            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-grey" width={18} height={18} />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by code, type or wattage — e.g. MVS720, beam, IP65"
-              className="field h-12 rounded-2xl pl-11 text-base"
+              placeholder="Search code, type or wattage — e.g. MVS720, beam, IP65"
+              className="field h-11 pl-10 text-base"
               inputMode="search"
             />
           </label>
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
+          <div className="flex items-center gap-5 overflow-x-auto">
             {SERIES.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => setSeries(series === s.id ? null : s.id)}
-                className={`chip shrink-0 cursor-pointer py-2 transition ${series === s.id ? "border-amber-brand bg-amber-brand text-navy-950" : "hover:border-white/25"}`}
-              >
+              <Filter key={s.id} active={series === s.id} onClick={() => setSeries(series === s.id ? null : s.id)}>
                 {s.label}
-              </button>
+              </Filter>
             ))}
-            <button
-              onClick={() => setOutdoor(!outdoor)}
-              className={`chip shrink-0 cursor-pointer py-2 transition ${outdoor ? "border-amber-brand bg-amber-brand text-navy-950" : "hover:border-white/25"}`}
-            >
-              Outdoor (IP54+)
-            </button>
-            {active && (
-              <button
-                onClick={() => {
-                  setQuery("");
-                  setSection(null);
-                  setSeries(null);
-                  setOutdoor(false);
-                }}
-                className="chip shrink-0 cursor-pointer py-2 text-navy-300 hover:text-white"
-              >
-                <XIcon width={14} height={14} /> Clear
-              </button>
-            )}
+            <Filter active={outdoor} onClick={() => setOutdoor(!outdoor)}>
+              Outdoor
+            </Filter>
           </div>
         </div>
-        <nav className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]" aria-label="Categories">
-          <button
-            onClick={() => setSection(null)}
-            className={`shrink-0 cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition ${!section ? "bg-white text-navy-950" : "text-navy-300 hover:bg-white/5 hover:text-white"}`}
-          >
-            All <span className="opacity-60">{items.length}</span>
-          </button>
+        <nav className="mt-4 flex gap-5 overflow-x-auto [scrollbar-width:none]" aria-label="Sections">
+          <Filter active={!section} onClick={() => setSection(null)}>
+            All
+          </Filter>
           {sections.map((s) => (
-            <button
-              key={s.name}
-              onClick={() => setSection(section === s.name ? null : s.name)}
-              className={`shrink-0 cursor-pointer rounded-lg px-3 py-1.5 text-sm font-medium transition ${section === s.name ? "bg-white text-navy-950" : "text-navy-300 hover:bg-white/5 hover:text-white"}`}
-            >
-              {s.name} <span className="opacity-60">{s.count}</span>
-            </button>
+            <Filter key={s.name} active={section === s.name} onClick={() => setSection(section === s.name ? null : s.name)}>
+              {s.name}
+            </Filter>
           ))}
         </nav>
       </div>
 
-      {grouped.length === 0 && (
-        <div className="card mt-10 p-10 text-center text-navy-300">
-          No products match your search.
-        </div>
-      )}
+      {grouped.length === 0 && <p className="py-16 text-center text-grey">No products match your search.</p>}
 
       {grouped.map(([name, list]) => (
-        <section key={name} className="mt-10">
-          <div className="mb-4 flex items-baseline justify-between gap-4 border-b border-white/5 pb-3">
-            <h2 className="font-display text-2xl font-semibold text-white">{name}</h2>
-            <span className="text-sm text-navy-300">{list.length} fixtures</span>
+        <section key={name} className="mt-12">
+          <div className="border-b border-navy pb-3">
+            <h2 className="text-4xl tracking-tight text-ink sm:text-5xl">{name}</h2>
+            <p className="mt-2 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-orange">{list.length}</span>
+              <span className="caps text-sm text-navy">{list.length === 1 ? "Fixture" : "Fixtures"}</span>
+            </p>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-3">
             {list.map((p) => (
-              <Link
-                key={p.code}
-                href={`/p/${encodeURIComponent(p.code)}`}
-                className="group card overflow-hidden transition hover:-translate-y-0.5 hover:border-amber-brand/40 hover:shadow-[0_20px_50px_-20px_rgba(242,174,28,0.35)]"
-              >
-                <div className="product-stage relative aspect-[4/3]">
-                  {p.image ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={p.image}
-                      alt={`${p.code} ${p.name}`}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-contain p-3 mix-blend-multiply transition duration-300 group-hover:scale-[1.04]"
-                    />
-                  ) : null}
-                  <span className="absolute left-2 top-2 rounded-md bg-navy-950/85 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-amber-brand">
-                    {p.ip}
+              <li key={p.code} className="border-b border-line">
+                <Link href={`/p/${encodeURIComponent(p.code)}`} className="group flex items-center gap-4 py-4 pr-2">
+                  <span className="flex h-20 w-28 shrink-0 items-center justify-center bg-white">
+                    {p.image && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={p.image} alt={`${p.code} ${p.name}`} loading="lazy" className="max-h-20 max-w-28 object-contain" />
+                    )}
                   </span>
-                </div>
-                <div className="p-3 sm:p-4">
-                  <div className="truncate font-display text-[15px] font-semibold text-white">{p.code}</div>
-                  <div className="mt-0.5 truncate text-xs font-semibold uppercase tracking-wide text-amber-brand">
-                    {p.name}
-                  </div>
-                  {p.series && (
-                    <div className="mt-2 text-[11px] text-navy-300">
-                      {SERIES.find((s) => s.id === p.series)?.label} series
-                    </div>
-                  )}
-                </div>
-              </Link>
+                  <span className="min-w-0">
+                    <span className="block truncate text-xl text-ink group-hover:underline">{p.code}</span>
+                    <span className="block truncate font-bold text-orange">{p.name}</span>
+                    <span className="block text-xs text-grey">
+                      {p.series ? `${SERIES.find((s) => s.id === p.series)?.label} series · ` : ""}
+                      {p.ip}
+                    </span>
+                  </span>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       ))}
     </div>

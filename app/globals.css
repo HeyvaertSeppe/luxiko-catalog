@@ -1,24 +1,31 @@
 @import "tailwindcss";
 
+/* House style of the LUXIKO 2027 catalog: white pages, Open Sauce One,
+   letter-spaced League Spartan labels, navy bars and orange accents.
+   Flat and square — no rounded pills, shadows or gradients. */
+
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Sora", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Open Sauce One", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-label: "League Spartan", "Open Sauce One", ui-sans-serif, sans-serif;
 
-  --color-navy-950: #070b18;
-  --color-navy-900: #0b1124;
-  --color-navy-850: #10182f;
-  --color-navy-800: #151e3a;
-  --color-navy-700: #202a4b;
-  --color-navy-600: #2d3a64;
-  --color-navy-500: #414f7d;
-  --color-navy-300: #9aa3c4;
-  --color-navy-200: #c7cce0;
-  --color-navy-100: #e6e8f1;
-  --color-navy-50: #f4f5f9;
+  --color-ink: #111111;
+  --color-navy: #202a4b;
+  --color-navy-dark: #161d36;
+  --color-orange: #f2ae1c;
+  --color-orange-dark: #d9960a;
+  --color-grey: #8a8f9e;
+  --color-line: #e3e5ec;
+  --color-zebra: #f5f6f9;
+  --color-danger: #c0392b;
+  --color-ok: #1e8a4c;
 
-  --color-amber-brand: #f2ae1c;
-  --color-amber-soft: #ffd166;
-  --color-amber-deep: #d99305;
+  --radius-sm: 0;
+  --radius: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
 }
 
 @layer base {
@@ -27,76 +34,60 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-navy-950 text-navy-100 antialiased;
-    font-feature-settings: "cv11", "ss01";
+    @apply bg-white text-ink antialiased;
   }
   ::selection {
-    @apply bg-amber-brand text-navy-950;
+    @apply bg-orange text-navy;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-amber-brand;
+    @apply outline-2 outline-offset-2 outline-orange;
   }
+}
+
+/* Letter-spaced label, like "S E R I E S" in the catalog */
+@utility caps {
+  @apply font-label font-bold uppercase tracking-[0.28em];
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition
-    disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98];
+  @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-label text-[13px] font-bold uppercase tracking-[0.2em]
+    transition-colors disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 @utility btn-primary {
-  @apply btn bg-amber-brand text-navy-950 shadow-[0_8px_30px_-8px_rgba(242,174,28,0.6)] hover:bg-amber-soft;
+  @apply btn bg-orange text-navy hover:bg-navy hover:text-white;
 }
 
-@utility btn-ghost {
-  @apply btn border border-white/15 bg-white/5 text-white hover:border-white/30 hover:bg-white/10;
+@utility btn-secondary {
+  @apply btn border border-navy bg-white text-navy hover:bg-navy hover:text-white;
 }
 
-@utility chip {
-  @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-navy-200;
+@utility btn-danger {
+  @apply btn border border-danger bg-white text-danger hover:bg-danger hover:text-white;
 }
 
-@utility card {
-  @apply rounded-2xl border border-white/8 bg-navy-900/80;
+/* Navy table header bar */
+@utility bar {
+  @apply bg-navy px-3 py-2 font-label text-[11px] font-bold uppercase tracking-[0.28em] text-white;
 }
 
 @utility field {
-  @apply w-full rounded-xl border border-white/12 bg-navy-950/60 px-3.5 py-2.5 text-sm text-white placeholder:text-navy-300/60
-    outline-none transition focus:border-amber-brand focus:ring-2 focus:ring-amber-brand/25;
+  @apply w-full border border-line bg-white px-3 py-2.5 text-sm text-ink placeholder:text-grey outline-none transition-colors
+    focus:border-navy;
 }
 
-@utility label {
-  @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-navy-300;
+@utility field-label {
+  @apply mb-1.5 block font-label text-[11px] font-bold uppercase tracking-[0.24em] text-grey;
 }
 
-@utility eyebrow {
-  @apply text-xs font-semibold uppercase tracking-[0.2em] text-amber-brand;
+@utility tag {
+  @apply inline-flex items-center gap-1.5 border border-line px-2 py-1 text-xs text-navy;
 }
 
-@utility glow-bg {
-  background:
-    radial-gradient(60% 50% at 50% 0%, rgba(242, 174, 28, 0.12), transparent 70%),
-    radial-gradient(50% 40% at 90% 10%, rgba(92, 110, 255, 0.12), transparent 70%);
-}
-
-@utility product-stage {
-  background:
-    radial-gradient(70% 60% at 50% 45%, #ffffff 0%, #f1f2f7 60%, #e3e6ef 100%);
+@utility panel {
+  @apply border border-line bg-white;
 }
 
 dialog::backdrop {
-  background: rgba(3, 6, 15, 0.72);
-  backdrop-filter: blur(6px);
-}
-dialog[open] {
-  animation: dialog-in 0.22s ease-out;
-}
-@keyframes dialog-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+  background: rgba(17, 17, 17, 0.55);
 }

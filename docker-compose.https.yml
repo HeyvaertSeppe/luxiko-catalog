@@ -1,0 +1,22 @@
+# Optional: automatic HTTPS with Caddy.
+#   docker compose -f docker-compose.yml -f docker-compose.https.yml up -d --build
+# Needs SITE_DOMAIN in .env.local and ports 80 + 443 open to the internet.
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - catalog
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    env_file: .env.local
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  caddy-data:
+  caddy-config:

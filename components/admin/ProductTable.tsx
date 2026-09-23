@@ -42,7 +42,7 @@ export function ProductTable({ rows, sections }: { rows: AdminRow[]; sections: s
     <div className="mt-6">
       <div className="flex flex-col gap-2 md:flex-row">
         <label className="relative flex-1">
-          <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-navy-300" width={18} height={18} />
+          <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-grey" width={18} height={18} />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search code or name…" className="field pl-10" />
         </label>
         <select value={section} onChange={(e) => setSection(e.target.value)} className="field md:w-56">
@@ -58,34 +58,34 @@ export function ProductTable({ rows, sections }: { rows: AdminRow[]; sections: s
           <option value="nolib">No library files</option>
         </select>
       </div>
-      <p className="mt-3 text-xs text-navy-300">{list.length} of {rows.length} products</p>
+      <p className="mt-3 text-xs text-grey">{list.length} of {rows.length} products</p>
 
-      <div className="card mt-2 overflow-hidden">
-        <ul className="divide-y divide-white/5">
+      <div className="panel mt-2 overflow-hidden">
+        <ul className="divide-y divide-line">
           {list.map((r) => (
             <li key={r.id}>
-              <Link href={`/admin/products/${r.id}`} className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-white/[0.03] sm:gap-4 sm:px-4">
-                <span className="product-stage relative h-12 w-14 shrink-0 overflow-hidden rounded-lg">
+              <Link href={`/admin/products/${r.id}`} className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-zebra sm:gap-4 sm:px-4">
+                <span className="bg-white relative h-12 w-14 shrink-0 overflow-hidden">
                   {r.image && (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={r.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-contain p-0.5 mix-blend-multiply" />
+                    <img src={r.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-contain p-0.5" />
                   )}
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="flex items-center gap-2">
-                    <span className="truncate font-display text-sm font-semibold text-white">{r.code}</span>
+                    <span className="truncate text-sm font-semibold text-ink">{r.code}</span>
                     {!r.published && (
-                      <span className="inline-flex items-center gap-1 rounded bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-navy-200">
+                      <span className="inline-flex items-center gap-1 bg-zebra px-1.5 py-0.5 text-[10px] font-semibold uppercase text-navy">
                         <EyeOffIcon width={11} height={11} /> Hidden
                       </span>
                     )}
                     {r.needsReview && (
-                      <span className="inline-flex items-center gap-1 rounded bg-amber-brand/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-amber-brand" title="Some specs were cut off in the original PDF">
+                      <span className="inline-flex items-center gap-1 bg-zebra px-1.5 py-0.5 text-[10px] font-semibold uppercase text-orange-dark" title="Some specs were cut off in the original PDF">
                         <AlertIcon width={11} height={11} /> Review
                       </span>
                     )}
                   </span>
-                  <span className="block truncate text-xs text-navy-300">
+                  <span className="block truncate text-xs text-grey">
                     {r.name} · {r.section} · {r.ip}
                   </span>
                 </span>
@@ -96,7 +96,7 @@ export function ProductTable({ rows, sections }: { rows: AdminRow[]; sections: s
                       <span
                         key={c.id}
                         title={`${c.name}: ${has ? "uploaded" : "no file"}`}
-                        className={`w-10 rounded-md py-1 text-center text-[10px] font-bold ${has ? "bg-emerald-500/15 text-emerald-300" : "bg-white/[0.03] text-navy-500"}`}
+                        className={`w-10 py-1 text-center text-[10px] font-bold ${has ? "bg-navy text-white" : "bg-zebra text-grey"}`}
                       >
                         {SHORT[c.id]}
                       </span>

@@ -18,23 +18,23 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const notConfigured = !config.googleClientId || config.authSecret.length < 32;
 
   return (
-    <main className="glow-bg flex min-h-dvh items-center justify-center px-4">
-      <div className="card w-full max-w-sm p-8 text-center shadow-2xl">
+    <main className="flex min-h-dvh items-center justify-center px-4">
+      <div className="panel w-full max-w-sm p-8 text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/brand/logo-light.png" alt="LUXIKO" className="mx-auto h-12 w-auto" />
-        <h1 className="mt-8 font-display text-xl font-semibold text-white">Catalog admin</h1>
-        <p className="mt-2 text-sm text-navy-300">Sign in with your Google account to manage products, files and quotes.</p>
+        <img src="/brand/logo-dark.png" alt="LUXIKO" className="mx-auto h-12 w-auto" />
+        <h1 className="mt-8 text-xl font-semibold text-ink">Catalog admin</h1>
+        <p className="mt-2 text-sm text-grey">Sign in with your Google account to manage products, files and quotes.</p>
         {error && ERRORS[error] && (
-          <p className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-left text-sm text-red-200">{ERRORS[error]}</p>
+          <p className="mt-5 border border-danger bg-zebra px-3 py-2 text-left text-sm text-danger">{ERRORS[error]}</p>
         )}
         {notConfigured && (
-          <p className="mt-5 rounded-xl border border-amber-brand/30 bg-amber-brand/10 px-3 py-2 text-left text-sm text-amber-soft">
+          <p className="mt-5 border border-orange bg-zebra px-3 py-2 text-left text-sm text-navy">
             Setup needed: fill in AUTH_SECRET, GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in <code>.env.local</code> and restart.
           </p>
         )}
         <a
           href="/api/auth/google"
-          className="mt-6 flex w-full items-center justify-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#1f1f1f] transition hover:bg-navy-50"
+          className="mt-6 flex w-full items-center justify-center gap-3 bg-white px-4 py-3 text-sm font-semibold border border-navy text-navy transition hover:bg-zebra"
         >
           <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
             <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />

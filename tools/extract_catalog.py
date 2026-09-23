@@ -62,6 +62,24 @@ for info in cover.get_image_info(xrefs=True):
     else:
         pix.save(os.path.join(BRAND_DIR, "logo.png"))
 
+# Line-art icon used on the Moving Heads divider page (navy on white -> transparent)
+for pno, page in enumerate(doc):
+    if "F I X T U R E S" not in page.get_text():
+        continue
+    for info in page.get_image_info(xrefs=True):
+        if info["width"] == 486:  # logo
+            continue
+        pix = pymupdf.Pixmap(doc, info["xref"])
+        samples = pix.samples
+        w, h = pix.width, pix.height
+        alpha = bytearray(max(0, min(255, (255 - samples[i * pix.n]) * 255 // (255 - 32))) for i in range(w * h))
+        rgb = bytes([32, 42, 75]) * (w * h)
+        icon = pymupdf.Pixmap(pymupdf.csRGB, w, h, rgb, False)
+        icon = pymupdf.Pixmap(icon, pymupdf.Pixmap(pymupdf.csGRAY, w, h, bytes(alpha), False))
+        name = page.get_text().split("\n")[0].lower().replace(" ", "-")
+        os.makedirs(os.path.join(ROOT, "public", "brand", "icons"), exist_ok=True)
+        icon.save(os.path.join(ROOT, "public", "brand", "icons", f"{name}.png"))
+
 products = []
 sections = []
 order = 0

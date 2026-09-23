@@ -1,0 +1,10 @@
+# HTTPS reverse proxy for the LUXIKO catalog.
+# Caddy requests and renews the Let's Encrypt certificate automatically.
+# SITE_DOMAIN comes from .env.local (e.g. catalog.luxiko.be).
+{$SITE_DOMAIN} {
+	encode gzip
+	request_body {
+		max_size 60MB
+	}
+	reverse_proxy catalog:3000
+}

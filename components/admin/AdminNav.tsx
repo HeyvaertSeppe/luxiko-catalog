@@ -16,11 +16,11 @@ export function AdminNav({ newQuotes }: { newQuotes: number }) {
         <Link
           key={i.href}
           href={i.href}
-          className={`relative shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition ${i.active ? "bg-white/10 text-white" : "text-navy-300 hover:text-white"}`}
+          className={`caps relative shrink-0 px-1 py-1.5 text-[11px] transition ${i.active ? "border-b-2 border-orange text-navy" : "border-b-2 border-transparent text-grey hover:text-navy"}`}
         >
           {i.label}
           {i.badge ? (
-            <span className="ml-1.5 rounded-full bg-amber-brand px-1.5 py-0.5 text-[10px] font-bold text-navy-950">{i.badge}</span>
+            <span className="ml-1.5 bg-orange px-1.5 py-0.5 text-[10px] font-bold text-navy">{i.badge}</span>
           ) : null}
         </Link>
       ))}

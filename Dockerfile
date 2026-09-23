@@ -1,9 +1,8 @@
 FROM node:22-bookworm-slim AS build
 WORKDIR /app
-# Build tools, only used if no prebuilt better-sqlite3 binary is available
-RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && rm -rf /var/lib/apt/lists/*
 COPY package.json package-lock.json ./
-RUN npm ci
+# better-sqlite3 and sharp ship prebuilt binaries, so no compiler is needed
+RUN npm ci --ignore-scripts
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build && npm prune --omit=dev
