@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Secrets — never commit these
+.env
+.env.local
+.env.*.local
+
+# Runtime data (database + uploaded files)
+data/
+
+.DS_Store
+npm-debug.log*

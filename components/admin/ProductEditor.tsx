@@ -1,0 +1,593 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { CONSOLES, type ConsoleId } from "@/lib/consoles";
+import type { Capability, Product, Spec } from "@/lib/products";
+import {
+  AlertIcon,
+  ArrowLeftIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  FileIcon,
+  PlusIcon,
+  StarIcon,
+  TrashIcon,
+  UploadIcon,
+  XIcon,
+} from "../icons";
+
+type Form = {
+  code: string;
+  name: string;
+  section: string;
+  series: "B" | "S" | "P" | null;
+  ip: string;
+  description: string;
+  dmxModes: string[];
+  capabilities: Capability[];
+  specs: Spec[];
+  published: boolean;
+  needsReview: boolean;
+};
+
+const CAPABILITY_PRESETS = ["Zoom", "Frost", "Prism", "CMY", "CTO", "Battery", "Wireless DMX", "RDM", "Art-Net", "sACN", "Pixel control", "Silent (fanless)"];
+const SPEC_PRESETS = ["Source", "Voltage", "Power", "Control", "Beam Angle", "Zoom", "Dimmer", "Strobe", "Pan", "Tilt", "Color Wheels", "Gobos", "Colour Temp", "CRI", "LED Life", "Cooling", "Connectors", "Housing", "Operating Temp", "Size", "Weight", "Carton"];
+
+function toForm(p: Product | null): Form {
+  return {
+    code: p?.code ?? "",
+    name: p?.name ?? "",
+    section: p?.section ?? "Moving Heads",
+    series: p?.series ?? "S",
+    ip: p?.ip ?? "IP20",
+    description: p?.description ?? "",
+    dmxModes: p?.dmxModes ?? [],
+    capabilities: p?.capabilities ?? [],
+    specs: p?.specs ?? [],
+    published: p?.published ?? true,
+    needsReview: p?.needsReview ?? false,
+  };
+}
+
+function formatSize(bytes: number) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function move<T>(list: T[], from: number, to: number) {
+  const next = [...list];
+  const [item] = next.splice(from, 1);
+  next.splice(to, 0, item);
+  return next;
+}
+
+function Card({ title, hint, children, action }: { title: string; hint?: string; children: React.ReactNode; action?: React.ReactNode }) {
+  return (
+    <section className="card p-5 sm:p-6">
+      <div className="mb-4 flex items-start justify-between gap-4">
+        <div>
+          <h2 className="font-display text-lg font-semibold text-white">{title}</h2>
+          {hint && <p className="mt-0.5 text-sm text-navy-300">{hint}</p>}
+        </div>
+        {action}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
+      onClick={() => onChange(!checked)}
+      className={`relative h-6 w-11 shrink-0 cursor-pointer rounded-full transition ${checked ? "bg-amber-brand" : "bg-white/15"}`}
+    >
+      <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${checked ? "left-[22px]" : "left-0.5"}`} />
+    </button>
+  );
+}
+
+export function ProductEditor({
+  initial,
+  sections,
+  ipRatings,
+  logos,
+}: {
+  initial: Product | null;
+  sections: string[];
+  ipRatings: string[];
+  logos: Record<ConsoleId, { url: string; custom: boolean }>;
+}) {
+  const router = useRouter();
+  const [product, setProduct] = useState<Product | null>(initial);
+  const [form, setForm] = useState<Form>(() => toForm(initial));
+  const [saved, setSaved] = useState<string>(() => JSON.stringify(toForm(initial)));
+  const [busy, setBusy] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
+  const [dmxInput, setDmxInput] = useState("");
+  const [capInput, setCapInput] = useState("");
+  const photoInput = useRef<HTMLInputElement>(null);
+
+  const dirty = useMemo(() => JSON.stringify(form) !== saved, [form, saved]);
+  const isNew = !product;
+
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (dirty) e.preventDefault();
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [dirty]);
+
+  useEffect(() => {
+    if (message?.kind !== "ok") return;
+    const t = setTimeout(() => setMessage(null), 3000);
+    return () => clearTimeout(t);
+  }, [message]);
+
+  const set = <K extends keyof Form>(key: K, value: Form[K]) => setForm((f) => ({ ...f, [key]: value }));
+
+  async function call(label: string, input: RequestInfo, init?: RequestInit) {
+    setBusy(label);
+    setMessage(null);
+    try {
+      const res = await fetch(input, init);
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || `Request failed (${res.status})`);
+      return json;
+    } catch (err) {
+      setMessage({ kind: "error", text: err instanceof Error ? err.message : "Something went wrong" });
+      return null;
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function save() {
+    const payload = {
+      ...form,
+      dmxModes: form.dmxModes.filter(Boolean),
+      specs: form.specs.filter((s) => s.label.trim() && s.value.trim()),
+      capabilities: form.capabilities.filter((c) => c.label.trim()),
+    };
+    if (isNew) {
+      const json = await call("save", "/api/admin/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (json?.id) {
+        setSaved(JSON.stringify(form));
+        router.replace(`/admin/products/${json.id}?created=1`);
+        router.refresh();
+      }
+      return;
+    }
+    const json = await call("save", `/api/admin/products/${product.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (json?.product) {
+      setProduct(json.product);
+      const next = toForm(json.product);
+      setForm(next);
+      setSaved(JSON.stringify(next));
+      setMessage({ kind: "ok", text: "Saved — the website is updated." });
+      router.refresh();
+    }
+  }
+
+  async function remove() {
+    if (!product) return;
+    if (!confirm(`Delete ${product.code}? This removes its photos and library files and cannot be undone.`)) return;
+    const json = await call("delete", `/api/admin/products/${product.id}`, { method: "DELETE" });
+    if (json) {
+      setSaved(JSON.stringify(form));
+      router.push("/admin");
+      router.refresh();
+    }
+  }
+
+  async function uploadPhotos(files: FileList | null) {
+    if (!product || !files?.length) return;
+    const body = new FormData();
+    for (const f of Array.from(files)) body.append("files", f);
+    const json = await call("photos", `/api/admin/products/${product.id}/images`, { method: "POST", body });
+    if (json?.product) {
+      setProduct(json.product);
+      setMessage({ kind: "ok", text: "Photo uploaded." });
+    }
+    if (photoInput.current) photoInput.current.value = "";
+  }
+
+  async function reorderPhotos(order: number[]) {
+    if (!product) return;
+    const json = await call("photos", `/api/admin/products/${product.id}/images`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ order }),
+    });
+    if (json?.product) setProduct(json.product);
+  }
+
+  async function deletePhoto(imageId: number) {
+    if (!product || !confirm("Remove this photo?")) return;
+    const json = await call("photos", `/api/admin/products/${product.id}/images?imageId=${imageId}`, { method: "DELETE" });
+    if (json?.product) setProduct(json.product);
+  }
+
+  async function uploadLibrary(consoleId: ConsoleId, file: File | undefined) {
+    if (!product || !file) return;
+    const body = new FormData();
+    body.append("console", consoleId);
+    body.append("file", file);
+    const json = await call(`lib-${consoleId}`, `/api/admin/products/${product.id}/libraries`, { method: "POST", body });
+    if (json?.product) {
+      setProduct(json.product);
+      setMessage({ kind: "ok", text: "Library file uploaded — the download button is now live." });
+    }
+  }
+
+  async function deleteLibrary(consoleId: ConsoleId, name: string) {
+    if (!product || !confirm(`Remove the ${name} file? The download button will disappear from the website.`)) return;
+    const json = await call(`lib-${consoleId}`, `/api/admin/products/${product.id}/libraries?console=${consoleId}`, { method: "DELETE" });
+    if (json?.product) setProduct(json.product);
+  }
+
+  function addDmx() {
+    const parts = dmxInput
+      .split(/[\/,]+/)
+      .map((s) => s.trim().toUpperCase())
+      .filter(Boolean)
+      .map((s) => (/^\d+$/.test(s) ? `${s}CH` : s));
+    if (parts.length) set("dmxModes", [...form.dmxModes, ...parts.filter((p) => !form.dmxModes.includes(p))]);
+    setDmxInput("");
+  }
+
+  function addCapability(label: string) {
+    const l = label.trim();
+    if (!l || form.capabilities.some((c) => c.label.toLowerCase() === l.toLowerCase())) return;
+    set("capabilities", [...form.capabilities, { label: l, enabled: true }]);
+    setCapInput("");
+  }
+
+  return (
+    <div className="pb-24">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="min-w-0">
+          <Link href="/admin" className="inline-flex items-center gap-1.5 text-sm text-navy-300 hover:text-white">
+            <ArrowLeftIcon width={16} height={16} /> All products
+          </Link>
+          <h1 className="mt-2 truncate font-display text-3xl font-semibold text-white">
+            {isNew ? "New product" : product.code}
+          </h1>
+          {!isNew && <p className="text-sm font-semibold uppercase text-amber-brand">{product.name}</p>}
+        </div>
+        {!isNew && (
+          <div className="flex gap-2">
+            <a href={`/p/${encodeURIComponent(product.code)}`} target="_blank" rel="noreferrer" className="btn-ghost">
+              View on site ↗
+            </a>
+          </div>
+        )}
+      </div>
+
+      {form.needsReview && (
+        <div className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-brand/30 bg-amber-brand/10 p-4 text-sm text-amber-soft">
+          <AlertIcon className="mt-0.5 shrink-0" />
+          <div>
+            <strong>Please check the specs.</strong> Some values of this product were cut off in the original PDF and were shortened
+            automatically. Correct them below, then switch off &ldquo;Needs review&rdquo; and save.
+          </div>
+        </div>
+      )}
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1.25fr_1fr]">
+        <div className="space-y-6">
+          <Card title="Basics">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="label" htmlFor="code">Product code</label>
+                <input id="code" className="field font-mono" value={form.code} onChange={(e) => set("code", e.target.value.toUpperCase())} />
+                {!isNew && form.code !== product.code && (
+                  <p className="mt-1 text-xs text-amber-soft">Changing the code changes the page address — printed QR codes use the old code.</p>
+                )}
+              </div>
+              <div>
+                <label className="label" htmlFor="name">Title (type)</label>
+                <input id="name" className="field" value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="e.g. 230W BEAM" />
+              </div>
+              <div>
+                <label className="label" htmlFor="section">Category</label>
+                <select id="section" className="field" value={form.section} onChange={(e) => set("section", e.target.value)}>
+                  {!sections.includes(form.section) && <option>{form.section}</option>}
+                  {sections.map((s) => (
+                    <option key={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="label" htmlFor="series">Series</label>
+                  <select id="series" className="field" value={form.series ?? ""} onChange={(e) => set("series", (e.target.value || null) as Form["series"])}>
+                    <option value="B">Budget</option>
+                    <option value="S">Standard</option>
+                    <option value="P">Premium</option>
+                    <option value="">None</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="label" htmlFor="ip">IP rating</label>
+                  <select id="ip" className="field" value={form.ip} onChange={(e) => set("ip", e.target.value)}>
+                    {!ipRatings.includes(form.ip) && <option>{form.ip}</option>}
+                    {ipRatings.map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="sm:col-span-2">
+                <label className="label" htmlFor="desc">Description (optional)</label>
+                <textarea id="desc" rows={3} className="field resize-y" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Short sales text shown under the title on the product page." />
+              </div>
+              <div className="flex items-center justify-between gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-3 sm:col-span-2">
+                <div>
+                  <div className="text-sm font-semibold text-white">Visible on website</div>
+                  <div className="text-xs text-navy-300">Hidden products return &ldquo;not found&rdquo; and are left out of the catalog.</div>
+                </div>
+                <Toggle label="Visible on website" checked={form.published} onChange={(v) => set("published", v)} />
+              </div>
+              <div className="flex items-center justify-between gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-3 sm:col-span-2">
+                <div>
+                  <div className="text-sm font-semibold text-white">Needs review</div>
+                  <div className="text-xs text-navy-300">Only a reminder for you — not shown to visitors.</div>
+                </div>
+                <Toggle label="Needs review" checked={form.needsReview} onChange={(v) => set("needsReview", v)} />
+              </div>
+            </div>
+          </Card>
+
+          <Card title="Specifications" hint="Shown as a table on the product page. Drag order with the arrows.">
+            <datalist id="spec-labels">
+              {SPEC_PRESETS.map((s) => (
+                <option key={s} value={s} />
+              ))}
+            </datalist>
+            <div className="space-y-2">
+              {form.specs.map((s, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <input
+                    className="field w-[38%] shrink-0"
+                    list="spec-labels"
+                    value={s.label}
+                    placeholder="Label"
+                    onChange={(e) => set("specs", form.specs.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))}
+                  />
+                  <input
+                    className="field min-w-0 flex-1"
+                    value={s.value}
+                    placeholder="Value"
+                    onChange={(e) => set("specs", form.specs.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))}
+                  />
+                  <div className="flex shrink-0 flex-col">
+                    <button type="button" disabled={i === 0} onClick={() => set("specs", move(form.specs, i, i - 1))} className="cursor-pointer rounded p-0.5 text-navy-300 hover:text-white disabled:opacity-20" aria-label="Move up">
+                      <ChevronUpIcon width={16} height={16} />
+                    </button>
+                    <button type="button" disabled={i === form.specs.length - 1} onClick={() => set("specs", move(form.specs, i, i + 1))} className="cursor-pointer rounded p-0.5 text-navy-300 hover:text-white disabled:opacity-20" aria-label="Move down">
+                      <ChevronDownIcon width={16} height={16} />
+                    </button>
+                  </div>
+                  <button type="button" onClick={() => set("specs", form.specs.filter((_, j) => j !== i))} className="shrink-0 cursor-pointer rounded-lg p-2 text-navy-300 hover:bg-red-500/10 hover:text-red-300" aria-label="Remove spec">
+                    <TrashIcon width={17} height={17} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button type="button" onClick={() => set("specs", [...form.specs, { label: "", value: "" }])} className="btn-ghost mt-3 w-full cursor-pointer border-dashed py-2.5">
+              <PlusIcon width={16} height={16} /> Add specification
+            </button>
+          </Card>
+        </div>
+
+        <div className="space-y-6">
+          <Card title="Photos" hint="The first photo is the main one (website + PDF).">
+            {isNew ? (
+              <p className="rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-navy-300">Save the product first, then add photos.</p>
+            ) : (
+              <>
+                <div className="grid grid-cols-3 gap-2">
+                  {product.images.map((img, i) => (
+                    <div key={img.id} className="group relative">
+                      <div className={`product-stage relative aspect-square overflow-hidden rounded-xl border-2 ${i === 0 ? "border-amber-brand" : "border-transparent"}`}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={img.url} alt="" className="absolute inset-0 h-full w-full object-contain p-1.5 mix-blend-multiply" />
+                        {i === 0 && (
+                          <span className="absolute left-1 top-1 rounded bg-amber-brand px-1.5 py-0.5 text-[9px] font-bold uppercase text-navy-950">Main</span>
+                        )}
+                      </div>
+                      <div className="mt-1 flex justify-center gap-1">
+                        {i > 0 && (
+                          <button type="button" title="Make main photo" onClick={() => reorderPhotos(move(product.images.map((x) => x.id), i, 0))} className="cursor-pointer rounded p-1 text-navy-300 hover:bg-white/5 hover:text-amber-brand">
+                            <StarIcon width={15} height={15} />
+                          </button>
+                        )}
+                        <button type="button" title="Remove photo" onClick={() => deletePhoto(img.id)} className="cursor-pointer rounded p-1 text-navy-300 hover:bg-red-500/10 hover:text-red-300">
+                          <TrashIcon width={15} height={15} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => photoInput.current?.click()}
+                    disabled={busy === "photos"}
+                    className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-white/15 text-xs text-navy-300 transition hover:border-amber-brand hover:text-amber-brand"
+                  >
+                    <UploadIcon />
+                    {busy === "photos" ? "Uploading…" : "Add photos"}
+                  </button>
+                </div>
+                <input ref={photoInput} type="file" accept="image/*" multiple className="hidden" onChange={(e) => uploadPhotos(e.target.files)} />
+                <p className="mt-3 text-xs text-navy-300">JPG, PNG or WebP up to 15 MB. Photos are resized and optimised automatically. A white background looks best.</p>
+              </>
+            )}
+          </Card>
+
+          <Card title="Console libraries" hint="A download button only shows on the website when a file is uploaded.">
+            {isNew ? (
+              <p className="rounded-xl border border-dashed border-white/10 p-6 text-center text-sm text-navy-300">Save the product first, then upload library files.</p>
+            ) : (
+              <ul className="space-y-2.5">
+                {CONSOLES.map((c) => {
+                  const file = product.libraries.find((l) => l.console === c.id);
+                  const inputId = `lib-${c.id}`;
+                  return (
+                    <li key={c.id} className={`flex items-center gap-3 rounded-xl border p-3 ${file ? "border-emerald-500/25 bg-emerald-500/[0.04]" : "border-white/5 bg-white/[0.02]"}`}>
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={logos[c.id].url} alt="" className={logos[c.id].custom ? "h-8 w-8 object-contain" : "h-11 w-11"} />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-semibold text-white">{c.name}</div>
+                        {file ? (
+                          <a href={file.url} className="flex items-center gap-1 truncate text-xs text-emerald-300 hover:underline">
+                            <FileIcon width={12} height={12} className="shrink-0" /> {file.originalName} · {formatSize(file.size)}
+                          </a>
+                        ) : (
+                          <div className="text-xs text-navy-500">No file — button hidden</div>
+                        )}
+                      </div>
+                      <label htmlFor={inputId} className={`btn-ghost shrink-0 cursor-pointer px-3 py-2 text-xs ${busy === inputId ? "pointer-events-none opacity-50" : ""}`}>
+                        <UploadIcon width={14} height={14} /> {busy === inputId ? "…" : file ? "Replace" : "Upload"}
+                      </label>
+                      <input
+                        id={inputId}
+                        type="file"
+                        accept={c.accept}
+                        className="hidden"
+                        onChange={(e) => {
+                          uploadLibrary(c.id, e.target.files?.[0]);
+                          e.target.value = "";
+                        }}
+                      />
+                      {file && (
+                        <button type="button" onClick={() => deleteLibrary(c.id, c.name)} className="shrink-0 cursor-pointer rounded-lg p-2 text-navy-300 hover:bg-red-500/10 hover:text-red-300" aria-label={`Remove ${c.name} file`}>
+                          <TrashIcon width={16} height={16} />
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </Card>
+
+          <Card title="DMX modes">
+            <div className="flex flex-wrap gap-2">
+              {form.dmxModes.map((m, i) => (
+                <span key={`${m}-${i}`} className="chip border-white/15 py-1.5 pr-1.5 text-white">
+                  {m}
+                  <button type="button" onClick={() => set("dmxModes", form.dmxModes.filter((_, j) => j !== i))} className="cursor-pointer rounded-full p-0.5 text-navy-300 hover:bg-white/10 hover:text-white" aria-label={`Remove ${m}`}>
+                    <XIcon width={12} height={12} />
+                  </button>
+                </span>
+              ))}
+              {form.dmxModes.length === 0 && <span className="text-sm text-navy-500">None — shown as &ldquo;on request&rdquo;.</span>}
+            </div>
+            <div className="mt-3 flex gap-2">
+              <input
+                className="field"
+                value={dmxInput}
+                onChange={(e) => setDmxInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addDmx();
+                  }
+                }}
+                placeholder="e.g. 16CH / 20CH"
+              />
+              <button type="button" onClick={addDmx} className="btn-ghost shrink-0 cursor-pointer px-4">Add</button>
+            </div>
+          </Card>
+
+          <Card title="Features" hint="On = highlighted, off = shown crossed out. Remove to hide completely.">
+            <ul className="space-y-1.5">
+              {form.capabilities.map((c, i) => (
+                <li key={`${c.label}-${i}`} className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2">
+                  <span className={`flex-1 text-sm font-medium ${c.enabled ? "text-white" : "text-navy-300"}`}>{c.label}</span>
+                  <Toggle label={c.label} checked={c.enabled} onChange={(v) => set("capabilities", form.capabilities.map((x, j) => (j === i ? { ...x, enabled: v } : x)))} />
+                  <button type="button" onClick={() => set("capabilities", form.capabilities.filter((_, j) => j !== i))} className="cursor-pointer rounded-lg p-1.5 text-navy-300 hover:bg-red-500/10 hover:text-red-300" aria-label={`Remove ${c.label}`}>
+                    <TrashIcon width={15} height={15} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {CAPABILITY_PRESETS.filter((p) => !form.capabilities.some((c) => c.label.toLowerCase() === p.toLowerCase())).map((p) => (
+                <button key={p} type="button" onClick={() => addCapability(p)} className="chip cursor-pointer hover:border-amber-brand hover:text-amber-brand">
+                  <PlusIcon width={12} height={12} /> {p}
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 flex gap-2">
+              <input
+                className="field"
+                value={capInput}
+                onChange={(e) => setCapInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addCapability(capInput);
+                  }
+                }}
+                placeholder="Custom feature…"
+              />
+              <button type="button" onClick={() => addCapability(capInput)} className="btn-ghost shrink-0 cursor-pointer px-4">Add</button>
+            </div>
+          </Card>
+
+          {!isNew && (
+            <section className="rounded-2xl border border-red-500/20 p-5">
+              <h2 className="font-semibold text-red-200">Delete product</h2>
+              <p className="mt-1 text-sm text-navy-300">Removes the product, its photos, library files and short links. Tip: switch off &ldquo;Visible on website&rdquo; to hide it instead.</p>
+              <button type="button" onClick={remove} disabled={busy === "delete"} className="btn mt-3 cursor-pointer border border-red-500/40 text-red-200 hover:bg-red-500/10">
+                <TrashIcon width={16} height={16} /> Delete {product.code}
+              </button>
+            </section>
+          )}
+        </div>
+      </div>
+
+      {/* Save bar */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-navy-950/90 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
+          <div className="min-w-0 flex-1 text-sm">
+            {message ? (
+              <span className={message.kind === "ok" ? "text-emerald-300" : "text-red-300"}>{message.text}</span>
+            ) : dirty ? (
+              <span className="text-amber-soft">You have unsaved changes</span>
+            ) : (
+              <span className="text-navy-300">{isNew ? "Fill in the basics and save" : "All changes saved"}</span>
+            )}
+          </div>
+          {dirty && !isNew && (
+            <button type="button" onClick={() => setForm(JSON.parse(saved))} className="btn-ghost cursor-pointer px-4 py-2.5">
+              Discard
+            </button>
+          )}
+          <button type="button" onClick={save} disabled={busy === "save" || (!dirty && !isNew)} className="btn-primary cursor-pointer px-6 py-2.5">
+            {busy === "save" ? "Saving…" : isNew ? "Create product" : "Save changes"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

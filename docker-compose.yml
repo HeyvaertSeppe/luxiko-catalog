@@ -1,0 +1,16 @@
+services:
+  catalog:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    # All secrets come from .env.local (never committed to git)
+    env_file: .env.local
+    environment:
+      DATA_DIR: /app/data
+    volumes:
+      # Database + uploaded photos / library files. Back this volume up!
+      - catalog-data:/app/data
+
+volumes:
+  catalog-data:
