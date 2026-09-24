@@ -33,6 +33,7 @@ const C = {
   orange: "#F2AE1C",
   grey: "#8A8F9E",
   zebra: "#F5F6F9",
+  hairline: "#E6E8EE",
   white: "#FFFFFF",
 };
 
@@ -59,8 +60,13 @@ function registerFonts(doc: PDFKit.PDFDocument) {
 /** Loads a product photo on white and returns a print-sized PNG buffer. */
 async function loadProductImage(file: string): Promise<Buffer | null> {
   try {
-    return await sharp(fs.readFileSync(file))
-      .flatten({ background: "#ffffff" })
+    const flat = await sharp(fs.readFileSync(file)).flatten({ background: "#ffffff" }).toBuffer();
+    // Trim the white border around the product so it centres visually in its box.
+    const trimmed = await sharp(flat)
+      .trim({ background: "#ffffff", threshold: 20 })
+      .toBuffer()
+      .catch(() => flat);
+    return await sharp(trimmed)
       .resize({ width: 480, height: 480, fit: "inside", withoutEnlargement: true })
       .png()
       .toBuffer();
@@ -329,21 +335,47 @@ export async function buildCatalogPdf(opts: CatalogOptions): Promise<Buffer> {
         const sw = label(doc, g.series ? `${SERIES_LABEL[g.series]} series` : "Collection", 23, 112, 21, C.navy);
         if (start > 0) label(doc, "Continued", 23 + sw + 14, 116, 15.1, C.orange);
 
-        g.items.slice(start, start + ROWS_PER_PAGE).forEach((p, i) => {
+        const rows = g.items.slice(start, start + ROWS_PER_PAGE);
+        rows.forEach((p, i) => {
           const y0 = FIRST_ROW + i * ROW_PITCH;
-          const img = images.get(p.id);
-          if (img) doc.image(img, 52, y0 + 24, { fit: [108, 79.2], align: "center", valign: "center" });
-          doc.font("Sauce").fontSize(19.5).fillColor(C.ink).text(p.code, 166, y0, { lineBreak: false });
-          doc.font("SauceBold").fontSize(16).fillColor(C.orange);
-          doc.text(p.name, 166, y0 + 25, { width: 290, height: 40, lineGap: -1, ellipsis: true });
-          doc.font("Sauce").fontSize(9).fillColor(C.grey);
-          doc.text(`${siteLabel}/p/${p.code}`, 166, doc.y + 4, { width: 290, lineBreak: false, ellipsis: true });
+          const cy = y0 + ROW_PITCH / 2; // everything in the row is centred on this line
 
+          // Hairline between products
+          if (i < rows.length - 1) {
+            doc.moveTo(52, y0 + ROW_PITCH).lineTo(R, y0 + ROW_PITCH).lineWidth(0.4).stroke(C.hairline);
+          }
+
+          // Photo, centred in its box
+          const img = images.get(p.id);
+          if (img) doc.image(img, 52, cy - 44, { fit: [108, 88], align: "center", valign: "center" });
+
+          // QR code + caption, centred on the row
           const qs = 74;
-          const qx = R - qs;
-          drawQr(doc, productUrl(p.code), qx, y0 + 4, qs);
-          label(doc, "Scan for specs", qx - 20, y0 + qs + 10, 6.5, C.navy, { width: qs + 40, align: "center" });
-          doc.link(52, y0, R - 52, 104, productUrl(p.code));
+          const qx = R - qs - 30;
+          const qy = cy - (qs + 12) / 2;
+          drawQr(doc, productUrl(p.code), qx, qy, qs);
+          label(doc, "Scan for specs", qx - 20, qy + qs + 6, 6.5, C.navy, { width: qs + 40, align: "center" });
+
+          // Text block (code, type, link), vertically centred
+          const tx = 178;
+          const tw = qx - 20 - tx;
+          doc.font("Sauce").fontSize(19.5);
+          const codeH = doc.currentLineHeight();
+          doc.font("SauceBold").fontSize(16);
+          const nameH = Math.min(doc.heightOfString(p.name, { width: tw, lineGap: -1 }), 2 * doc.currentLineHeight());
+          doc.font("Sauce").fontSize(9);
+          const urlH = doc.currentLineHeight();
+          const blockH = codeH + 2 + nameH + 5 + urlH;
+          let ty = cy - blockH / 2;
+          doc.font("Sauce").fontSize(19.5).fillColor(C.ink).text(p.code, tx, ty, { width: tw, lineBreak: false, ellipsis: true });
+          ty += codeH + 2;
+          doc.font("SauceBold").fontSize(16).fillColor(C.orange);
+          doc.text(p.name, tx, ty, { width: tw, height: nameH + 1, lineGap: -1, ellipsis: true });
+          ty += nameH + 5;
+          doc.font("Sauce").fontSize(9).fillColor(C.grey);
+          doc.text(`${siteLabel}/p/${p.code}`, tx, ty, { width: tw, lineBreak: false, ellipsis: true });
+
+          doc.link(52, y0, R - 52, ROW_PITCH, productUrl(p.code));
         });
         footer();
       }
