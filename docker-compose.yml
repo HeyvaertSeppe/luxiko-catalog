@@ -1,16 +1,24 @@
+# LUXIKO catalog
+#   docker compose up -d --build
+#   docker compose logs catalog      ← shows the admin login on first start
+#
+# No settings needed here: configure everything in Admin → Settings.
 services:
   catalog:
     build: .
+    image: luxiko-catalog
+    container_name: luxiko-catalog
     restart: unless-stopped
     ports:
+      # Point your reverse proxy at http://<this-server>:3000
       - "3000:3000"
-    # All secrets come from .env.local (never committed to git)
-    env_file: .env.local
-    environment:
-      DATA_DIR: /app/data
     volumes:
-      # Database + uploaded photos / library files. Back this volume up!
+      # Database, uploaded photos / library files and config.env. Back this up!
       - catalog-data:/app/data
+    # Optional — only used on the very first start:
+    # environment:
+    #   ADMIN_USERNAME: admin
+    #   ADMIN_PASSWORD: choose-a-long-password
 
 volumes:
   catalog-data:

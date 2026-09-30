@@ -21,7 +21,7 @@ export default function QuotesPage() {
       </p>
       {!mailConfigured() && (
         <div className="mt-4 border border-orange bg-zebra p-4 text-sm text-navy">
-          E-mail is not configured yet: set <code>RESEND_API_KEY</code>, <code>MAIL_FROM</code> and <code>QUOTE_TO_EMAIL</code> in <code>.env.local</code>. Requests are still saved on this page.
+          E-mail is not set up yet — add your Resend API key and quote address in <a href="/admin/settings" className="underline">Settings</a>. Requests are still saved on this page.
         </div>
       )}
       <QuoteList rows={rows} />

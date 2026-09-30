@@ -1,91 +1,63 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* House style of the LUXIKO 2027 catalog: white pages, Open Sauce One,
    letter-spaced League Spartan labels, navy bars and orange accents.
    Flat and square — no rounded pills, shadows or gradients. */
 
-@theme {
-  --font-sans: "Open Sauce One", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-label: "League Spartan", "Open Sauce One", ui-sans-serif, sans-serif;
-
-  --color-ink: #111111;
-  --color-navy: #202a4b;
-  --color-navy-dark: #161d36;
-  --color-orange: #f2ae1c;
-  --color-orange-dark: #d9960a;
-  --color-grey: #8a8f9e;
-  --color-line: #e3e5ec;
-  --color-zebra: #f5f6f9;
-  --color-danger: #c0392b;
-  --color-ok: #1e8a4c;
-
-  --radius-sm: 0;
-  --radius: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
-  --radius-3xl: 0;
-}
-
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
-    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
   body {
-    @apply bg-white text-ink antialiased;
+    @apply bg-white font-sans text-ink antialiased;
   }
   ::selection {
     @apply bg-orange text-navy;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-orange;
+    outline: 2px solid #f2ae1c;
+    outline-offset: 2px;
   }
 }
 
-/* Letter-spaced label, like "S E R I E S" in the catalog */
-@utility caps {
-  @apply font-label font-bold uppercase tracking-[0.28em];
-}
-
-@utility btn {
-  @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-label text-[13px] font-bold uppercase tracking-[0.2em]
-    transition-colors disabled:cursor-not-allowed disabled:opacity-50;
-}
-
-@utility btn-primary {
-  @apply btn bg-orange text-navy hover:bg-navy hover:text-white;
-}
-
-@utility btn-secondary {
-  @apply btn border border-navy bg-white text-navy hover:bg-navy hover:text-white;
-}
-
-@utility btn-danger {
-  @apply btn border border-danger bg-white text-danger hover:bg-danger hover:text-white;
-}
-
-/* Navy table header bar */
-@utility bar {
-  @apply bg-navy px-3 py-2 font-label text-[11px] font-bold uppercase tracking-[0.28em] text-white;
-}
-
-@utility field {
-  @apply w-full border border-line bg-white px-3 py-2.5 text-sm text-ink placeholder:text-grey outline-none transition-colors
-    focus:border-navy;
-}
-
-@utility field-label {
-  @apply mb-1.5 block font-label text-[11px] font-bold uppercase tracking-[0.24em] text-grey;
-}
-
-@utility tag {
-  @apply inline-flex items-center gap-1.5 border border-line px-2 py-1 text-xs text-navy;
-}
-
-@utility panel {
-  @apply border border-line bg-white;
+@layer components {
+  /* Letter-spaced label, like "S E R I E S" in the catalog */
+  .caps {
+    @apply font-label font-bold uppercase tracking-[0.28em];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-label text-[13px] font-bold uppercase tracking-[0.2em]
+      transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-orange text-navy hover:bg-navy hover:text-white;
+  }
+  .btn-secondary {
+    @apply btn border border-navy bg-white text-navy hover:bg-navy hover:text-white;
+  }
+  .btn-danger {
+    @apply btn border border-danger bg-white text-danger hover:bg-danger hover:text-white;
+  }
+  /* Navy table header bar */
+  .bar {
+    @apply bg-navy px-3 py-2 font-label text-[11px] font-bold uppercase tracking-[0.28em] text-white;
+  }
+  .field {
+    @apply w-full border border-line bg-white px-3 py-2.5 text-base text-ink outline-none transition-colors placeholder:text-grey
+      focus:border-navy sm:text-sm;
+  }
+  .field-label {
+    @apply mb-1.5 block font-label text-[11px] font-bold uppercase tracking-[0.24em] text-grey;
+  }
+  .tag {
+    @apply inline-flex items-center gap-1.5 border border-line px-2 py-1 text-xs text-navy;
+  }
+  .panel {
+    @apply border border-line bg-white;
+  }
 }
 
 dialog::backdrop {

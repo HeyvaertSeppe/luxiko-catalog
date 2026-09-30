@@ -57,7 +57,7 @@ function registerFonts(doc: PDFKit.PDFDocument) {
   doc.registerFont("Spartan", fontFile("league-spartan", "league-spartan-latin-700-normal.woff"));
 }
 
-/** Loads a product photo on white and returns a print-sized PNG buffer. */
+/** Loads a product photo on white and returns a print-sized JPEG (~300 dpi in the PDF). */
 async function loadProductImage(file: string): Promise<Buffer | null> {
   try {
     const flat = await sharp(fs.readFileSync(file)).flatten({ background: "#ffffff" }).toBuffer();
@@ -67,8 +67,8 @@ async function loadProductImage(file: string): Promise<Buffer | null> {
       .toBuffer()
       .catch(() => flat);
     return await sharp(trimmed)
-      .resize({ width: 480, height: 480, fit: "inside", withoutEnlargement: true })
-      .png()
+      .resize({ width: 400, height: 400, fit: "inside", withoutEnlargement: true })
+      .jpeg({ quality: 86, mozjpeg: true })
       .toBuffer();
   } catch {
     return null;

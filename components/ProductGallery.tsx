@@ -12,7 +12,7 @@ export function ProductGallery({ images, alt }: { images: ProductImage[]; alt: s
       <div className="relative flex aspect-[4/3] items-center justify-center bg-white">
         {current ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={current.id} src={current.url} alt={alt} className="h-full w-full object-contain" />
+          <img key={current.id} src={current.url} alt={alt} className="max-h-full max-w-full object-contain" />
         ) : (
           <span className="text-sm text-grey">Photo coming soon</span>
         )}

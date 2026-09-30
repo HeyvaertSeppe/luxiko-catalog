@@ -29,9 +29,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </Link>
             {session.picture ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={session.picture} alt="" referrerPolicy="no-referrer" className="h-8 w-8" title={session.email} />
+              <img src={session.picture} alt="" referrerPolicy="no-referrer" className="h-8 w-8" title={session.email ?? session.name} />
             ) : (
-              <span className="flex h-8 w-8 items-center justify-center bg-navy text-xs font-bold" title={session.email}>
+              <span className="flex h-8 w-8 items-center justify-center bg-navy text-xs font-bold text-white" title={session.email ?? session.name}>
                 {session.name.slice(0, 1).toUpperCase()}
               </span>
             )}

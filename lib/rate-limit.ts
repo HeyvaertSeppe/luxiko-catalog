@@ -16,10 +16,16 @@ export function rateLimit(key: string, limit: number, windowMs: number): boolean
   return true;
 }
 
+/**
+ * Client IP for rate limiting. Behind a reverse proxy the right-most
+ * X-Forwarded-For entry is the one added by your own proxy, so visitors
+ * cannot spoof it by sending their own header.
+ */
 export function clientIp(req: Request) {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown"
-  );
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) {
+    const hops = xff.split(",").map((h) => h.trim()).filter(Boolean);
+    if (hops.length) return hops[hops.length - 1];
+  }
+  return req.headers.get("x-real-ip")?.trim() || "direct";
 }

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { NextResponse, type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { decodeJwt } from "jose";
 import { config } from "@/lib/config";
 import {
@@ -7,14 +7,17 @@ import {
   STATE_COOKIE,
   createSessionToken,
   isAllowedAdmin,
+  redirectTo,
   sessionCookieOptions,
 } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
+const clearState = `${STATE_COOKIE}=; Path=/api/auth; Max-Age=0; HttpOnly; SameSite=Lax`;
+
 function fail(reason: string) {
-  const res = NextResponse.redirect(`${config.siteUrl}/admin/login?error=${reason}`);
-  res.cookies.delete({ name: STATE_COOKIE, path: "/api/auth" });
+  const res = redirectTo(`/admin/login?error=${reason}`, 302);
+  res.headers.append("Set-Cookie", clearState);
   return res;
 }
 
@@ -25,12 +28,11 @@ function safeEqual(a: string, b: string) {
 }
 
 export async function GET(req: NextRequest) {
+  if (!config.googleEnabled) return fail("config");
   const code = req.nextUrl.searchParams.get("code");
   const state = req.nextUrl.searchParams.get("state");
   const [savedState, verifier] = (req.cookies.get(STATE_COOKIE)?.value ?? "").split(".");
-  if (!code || !state || !savedState || !verifier || !safeEqual(state, savedState)) {
-    return fail("state");
-  }
+  if (!code || !state || !savedState || !verifier || !safeEqual(state, savedState)) return fail("state");
 
   // Exchange the one-time code for tokens directly with Google (server to server).
   const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
@@ -44,8 +46,8 @@ export async function GET(req: NextRequest) {
       grant_type: "authorization_code",
       code_verifier: verifier,
     }),
-  });
-  if (!tokenRes.ok) return fail("google");
+  }).catch(() => null);
+  if (!tokenRes?.ok) return fail("google");
   const tokens = (await tokenRes.json()) as { id_token?: string };
   if (!tokens.id_token) return fail("google");
 
@@ -60,12 +62,17 @@ export async function GET(req: NextRequest) {
   if (!isAllowedAdmin(email)) return fail("denied");
 
   const token = await createSessionToken({
+    m: "google",
     email,
     name: String(claims.name ?? email),
     picture: typeof claims.picture === "string" ? claims.picture : undefined,
   });
-  const res = NextResponse.redirect(`${config.siteUrl}/admin`);
-  res.cookies.set(SESSION_COOKIE, token, sessionCookieOptions);
-  res.cookies.delete({ name: STATE_COOKIE, path: "/api/auth" });
+  const res = redirectTo("/admin", 302);
+  const o = sessionCookieOptions(req);
+  res.headers.append(
+    "Set-Cookie",
+    `${SESSION_COOKIE}=${token}; Path=/; Max-Age=${o.maxAge}; HttpOnly; SameSite=Lax${o.secure ? "; Secure" : ""}`,
+  );
+  res.headers.append("Set-Cookie", clearState);
   return res;
 }

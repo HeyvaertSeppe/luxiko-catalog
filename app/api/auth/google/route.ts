@@ -1,22 +1,16 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { config } from "@/lib/config";
-import { STATE_COOKIE } from "@/lib/auth";
+import { STATE_COOKIE, isHttps, redirectTo } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-function b64url(buf: Buffer) {
-  return buf.toString("base64url");
-}
-
 /** Starts Google sign-in (OAuth 2.0 authorization code flow with PKCE). */
-export async function GET() {
-  if (!config.googleClientId || !config.googleClientSecret) {
-    return NextResponse.redirect(`${config.siteUrl}/admin/login?error=config`);
-  }
-  const state = b64url(crypto.randomBytes(24));
-  const verifier = b64url(crypto.randomBytes(48));
-  const challenge = b64url(crypto.createHash("sha256").update(verifier).digest());
+export async function GET(req: Request) {
+  if (!config.googleEnabled) return redirectTo("/admin/login?error=config", 302);
+  const state = crypto.randomBytes(24).toString("base64url");
+  const verifier = crypto.randomBytes(48).toString("base64url");
+  const challenge = crypto.createHash("sha256").update(verifier).digest("base64url");
 
   const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
   url.searchParams.set("client_id", config.googleClientId);
@@ -32,7 +26,7 @@ export async function GET() {
   res.cookies.set(STATE_COOKIE, `${state}.${verifier}`, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: isHttps(req),
     path: "/api/auth",
     maxAge: 600,
   });

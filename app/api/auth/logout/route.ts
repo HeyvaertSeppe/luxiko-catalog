@@ -1,9 +1,7 @@
-import { NextResponse } from "next/server";
-import { config } from "@/lib/config";
-import { SESSION_COOKIE } from "@/lib/auth";
+import { SESSION_COOKIE, redirectTo } from "@/lib/auth";
 
 export async function POST() {
-  const res = NextResponse.redirect(`${config.siteUrl}/admin/login`, { status: 303 });
-  res.cookies.delete(SESSION_COOKIE);
+  const res = redirectTo("/admin/login");
+  res.headers.append("Set-Cookie", `${SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax`);
   return res;
 }

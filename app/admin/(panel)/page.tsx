@@ -34,8 +34,8 @@ export default function AdminProductsPage() {
     <div>
       {missing.length > 0 && (
         <div className="mb-6 border border-orange bg-zebra p-4 text-sm text-navy">
-          <strong>Setup incomplete:</strong> {missing.join(", ")}. Fill these in <code>.env.local</code> and restart —
-          see <Link href="/admin/settings" className="underline">Settings</Link>.
+          <strong>E-mail not set up yet:</strong> {missing.join(" and ")} missing. Quote requests are saved, but not e-mailed —{" "}
+          <Link href="/admin/settings" className="underline">open Settings</Link>.
         </div>
       )}
       <div className="flex flex-wrap items-end justify-between gap-4">

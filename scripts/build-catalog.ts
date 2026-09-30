@@ -4,7 +4,7 @@
  *   npm run catalog:pdf                      -> catalog/LUXIKO_Product_Catalog_2027.pdf
  *   npm run catalog:pdf -- --out my.pdf
  *
- * QR codes point to SITE_URL from .env.local (or the environment).
+ * QR codes point to the website address from Admin → Settings (SITE_URL).
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -16,11 +16,13 @@ const { config } = await import("../lib/config");
 const { uploadsDir } = await import("../lib/db");
 const { listProducts } = await import("../lib/products");
 const { buildCatalogPdf } = await import("../lib/pdf/catalog");
+const { upgradeSeedImages } = await import("../lib/bootstrap");
 
 const outArg = process.argv.indexOf("--out");
 const out = path.resolve(outArg > -1 ? process.argv[outArg + 1] : "catalog/LUXIKO_Product_Catalog_2027.pdf");
 
 const started = Date.now();
+await upgradeSeedImages();
 const products = listProducts();
 const pdf = await buildCatalogPdf({
   products,
