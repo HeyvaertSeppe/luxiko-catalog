@@ -84,6 +84,27 @@ This prints a new password and signs out every session. You can also pass your o
 
 The default address is **`https://catalog.luxiko.be`**. Your reverse proxy must pass **everything** (pages, CSS, JS, images and downloads) to `http://<docker-host>:3000`. Don't let it serve files from a local folder: the app's files only exist inside the container.
 
+### Easiest: Cloudflare Tunnel (no FastPanel / nginx needed)
+
+Your domain already uses Cloudflare, so Cloudflare can connect **directly** to the Docker container in your Proxmox CT. No reverse proxy, no open ports, no FastPanel config.
+
+1. Open the Cloudflare dashboard → **Zero Trust** → **Networks → Tunnels** → **Create a tunnel**. Choose type **Cloudflared**, name it `luxiko-catalog`, and **copy the token** (the long `eyJh…` text in the install command).
+2. In the tunnel, open the **Public Hostname** tab → **Add a public hostname**:
+   - Subdomain `catalog`, domain `luxiko.be`
+   - Service type **HTTP**, URL **`catalog:3000`**
+   - Save. Cloudflare points the DNS for `catalog.luxiko.be` at the tunnel. If it complains that a record already exists, delete the old A record for `catalog` first.
+3. In the Proxmox CT, in the `luxiko-catalog` folder, create a file `.env` containing your token:
+   ```bash
+   echo "CLOUDFLARE_TUNNEL_TOKEN=eyJh...your-token..." > .env
+   chmod 600 .env
+   ```
+4. Start the catalog together with the tunnel:
+   ```bash
+   docker compose -f docker-compose.yml -f docker-compose.tunnel.yml up -d --build
+   docker compose -f docker-compose.yml -f docker-compose.tunnel.yml logs tunnel   # "Registered tunnel connection"
+   ```
+5. Remove the `catalog.luxiko.be` site from FastPanel, so it can't get in the way.
+
 ### FastPanel / nginx (catalog.luxiko.be)
 
 A ready-made, tested config is in **[`deploy/nginx-catalog.luxiko.be.conf`](deploy/nginx-catalog.luxiko.be.conf)**. It already contains your IPs (`10.1.2.222` → `10.1.3.245:3000`) and certificate paths. It:

@@ -1,0 +1,19 @@
+# Optional: publish the catalog through a Cloudflare Tunnel instead of a
+# reverse proxy (no FastPanel / nginx / open ports needed).
+#
+#   1. Cloudflare dashboard → Zero Trust → Networks → Tunnels → Create a tunnel
+#      (type "Cloudflared"), copy the token.
+#   2. In the tunnel: Public hostname → catalog.luxiko.be → Service: HTTP → catalog:3000
+#   3. Put the token in a file called .env next to this file:
+#        CLOUDFLARE_TUNNEL_TOKEN=eyJh...
+#   4. docker compose -f docker-compose.yml -f docker-compose.tunnel.yml up -d --build
+services:
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: luxiko-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?Put CLOUDFLARE_TUNNEL_TOKEN=... in a .env file next to docker-compose.yml}
+    depends_on:
+      - catalog
