@@ -21,6 +21,9 @@ os.makedirs(IMG_DIR, exist_ok=True)
 os.makedirs(BRAND_DIR, exist_ok=True)
 
 ORANGE = 0xF2AE1C
+# Sections that are not sold any more and are left out of the catalog
+EXCLUDED_SECTIONS = {"Controllers"}
+
 SERIES = {"BUDGET SERIES": "B", "STANDARD SERIES": "S", "PREMIUM SERIES": "P"}
 YES_NO = {"yes": True, "no": False}
 
@@ -101,6 +104,8 @@ for pno, page in enumerate(doc):
     if not codes or not title_parts:
         continue
     section = " ".join(title_parts)
+    if section in EXCLUDED_SECTIONS:
+        continue
     ip = ip_parts[0] if ip_parts else "IP N/A"
     series = SERIES[series_parts[0]] if series_parts else None
     if section not in sections:

@@ -17,7 +17,6 @@
     "Mirror Balls",
     "Retro & Vintage",
     "Fog & Haze Machines",
-    "Controllers",
     "Accessories"
   ],
   "products": [
@@ -10563,123 +10562,6 @@
       "sortOrder": 227,
       "needsReview": false,
       "sourcePage": 120
-    },
-    {
-      "code": "CTBX",
-      "name": "TOUCH WING",
-      "section": "Controllers",
-      "series": "B",
-      "ip": "IP N/A",
-      "dmxModes": [],
-      "capabilities": [],
-      "specs": [],
-      "image": "CTBX.png",
-      "sortOrder": 228,
-      "needsReview": false,
-      "sourcePage": 122
-    },
-    {
-      "code": "CTBX-2",
-      "name": "COMMAND WING",
-      "section": "Controllers",
-      "series": "B",
-      "ip": "IP N/A",
-      "dmxModes": [],
-      "capabilities": [],
-      "specs": [],
-      "image": "CTBX-2.png",
-      "sortOrder": 229,
-      "needsReview": false,
-      "sourcePage": 122
-    },
-    {
-      "code": "CTBX-3",
-      "name": "FADER WING",
-      "section": "Controllers",
-      "series": "B",
-      "ip": "IP N/A",
-      "dmxModes": [],
-      "capabilities": [],
-      "specs": [],
-      "image": "CTBX-3.png",
-      "sortOrder": 230,
-      "needsReview": false,
-      "sourcePage": 122
-    },
-    {
-      "code": "CTSX",
-      "name": "TOUCH DMX CONSOLE",
-      "section": "Controllers",
-      "series": "S",
-      "ip": "IP N/A",
-      "dmxModes": [],
-      "capabilities": [],
-      "specs": [],
-      "image": "CTSX.png",
-      "sortOrder": 231,
-      "needsReview": false,
-      "sourcePage": 123
-    },
-    {
-      "code": "CTSX-2",
-      "name": "TOUCH DMX CONSOLE II",
-      "section": "Controllers",
-      "series": "S",
-      "ip": "IP N/A",
-      "dmxModes": [],
-      "capabilities": [],
-      "specs": [],
-      "image": "CTSX-2.png",
-      "sortOrder": 232,
-      "needsReview": false,
-      "sourcePage": 123
-    },
-    {
-      "code": "CTSX-3",
-      "name": "COMPACT DMX CONSOLE",
-      "section": "Controllers",
-      "series": "S",
-      "ip": "IP N/A",
-      "dmxModes": [],
-      "capabilities": [],
-      "specs": [],
-      "image": "CTSX-3.png",
-      "sortOrder": 233,
-      "needsReview": false,
-      "sourcePage": 123
-    },
-    {
-      "code": "CTP150X",
-      "name": "150W FULL-SIZE DMX CONSOLE",
-      "section": "Controllers",
-      "series": "P",
-      "ip": "IP N/A",
-      "dmxModes": [],
-      "capabilities": [
-        {
-          "label": "Battery",
-          "enabled": true
-        }
-      ],
-      "specs": [],
-      "image": "CTP150X.png",
-      "sortOrder": 234,
-      "needsReview": false,
-      "sourcePage": 124
-    },
-    {
-      "code": "CTPX",
-      "name": "DUAL-SCREEN DMX CONSOLE",
-      "section": "Controllers",
-      "series": "P",
-      "ip": "IP N/A",
-      "dmxModes": [],
-      "capabilities": [],
-      "specs": [],
-      "image": "CTPX.png",
-      "sortOrder": 235,
-      "needsReview": false,
-      "sourcePage": 124
     },
     {
       "code": "ACBX",

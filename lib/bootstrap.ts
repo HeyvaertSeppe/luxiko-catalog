@@ -5,6 +5,7 @@ import { getSetting as getDbSetting, setSetting as setDbSetting } from "./settin
 import { ensureAdminAccount, INITIAL_PASSWORD_FILE } from "./admin-account";
 import { dataDir, getSetting, writeStore } from "./runtime-config";
 import { config } from "./config";
+import { removeUpload } from "./storage";
 
 /**
  * Installs that started with older catalog photos get the AI-upscaled ones.
@@ -41,6 +42,30 @@ export async function upgradeSeedImages() {
   if (n) console.log(`[luxiko] Replaced ${n} catalog photos with the high-quality versions`);
 }
 
+/**
+ * One-time cleanup: the Controllers category (DMX consoles and wings) is no
+ * longer part of the catalog. Removes the category and its products,
+ * including their photos and library files. Runs once per install.
+ */
+function removeControllers() {
+  if (getDbSetting("cleanup:controllers")) return;
+  const ids = db().prepare("SELECT id FROM products WHERE section = 'Controllers'").all() as { id: number }[];
+  const images = db()
+    .prepare("SELECT pi.file FROM product_images pi JOIN products p ON p.id = pi.product_id WHERE p.section = 'Controllers'")
+    .all() as { file: string }[];
+  const libs = db()
+    .prepare("SELECT l.file FROM library_files l JOIN products p ON p.id = l.product_id WHERE p.section = 'Controllers'")
+    .all() as { file: string }[];
+  db().transaction(() => {
+    db().prepare("DELETE FROM products WHERE section = 'Controllers'").run();
+    db().prepare("DELETE FROM sections WHERE name = 'Controllers'").run();
+    setDbSetting("cleanup:controllers", "1");
+  })();
+  for (const f of images) removeUpload("images", f.file);
+  for (const f of libs) removeUpload("library", f.file);
+  if (ids.length) console.log(`[luxiko] Removed the Controllers category (${ids.length} products)`);
+}
+
 let started: Promise<void> | null = null;
 
 /** Runs once when the server starts (see instrumentation.ts). */
@@ -55,6 +80,7 @@ export function bootstrap() {
     }
 
     db(); // creates / migrates the database and imports the catalog on first start
+    removeControllers();
     await upgradeSeedImages();
 
     const admin = await ensureAdminAccount();

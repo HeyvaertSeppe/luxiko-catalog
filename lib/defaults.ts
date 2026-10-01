@@ -18,7 +18,6 @@ export const DEFAULT_SECTIONS = [
   { name: "Mirror Balls", prefix: "MB" },
   { name: "Retro & Vintage", prefix: "RT" },
   { name: "Fog & Haze Machines", prefix: "FM" },
-  { name: "Controllers", prefix: "CT" },
   { name: "Accessories", prefix: "AC" },
 ];
 
