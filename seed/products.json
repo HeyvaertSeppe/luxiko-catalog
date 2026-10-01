@@ -67,7 +67,7 @@
           "value": "11"
         }
       ],
-      "image": "MVB200B1311.png",
+      "image": "MVB200B1311.webp",
       "sortOrder": 1,
       "needsReview": false,
       "sourcePage": 5
@@ -126,7 +126,7 @@
           "value": "17"
         }
       ],
-      "image": "MVB230B1317.png",
+      "image": "MVB230B1317.webp",
       "sortOrder": 2,
       "needsReview": false,
       "sourcePage": 5
@@ -185,7 +185,7 @@
           "value": "17"
         }
       ],
-      "image": "MVB230B1317-2.png",
+      "image": "MVB230B1317-2.webp",
       "sortOrder": 3,
       "needsReview": false,
       "sourcePage": 5
@@ -236,7 +236,7 @@
           "value": "4.2~49.6°"
         }
       ],
-      "image": "MVB280B.png",
+      "image": "MVB280B.webp",
       "sortOrder": 4,
       "needsReview": false,
       "sourcePage": 5
@@ -290,7 +290,7 @@
           "value": "13"
         }
       ],
-      "image": "MVB295B1213.png",
+      "image": "MVB295B1213.webp",
       "sortOrder": 5,
       "needsReview": false,
       "sourcePage": 6
@@ -340,7 +340,7 @@
           "value": "14"
         }
       ],
-      "image": "MVB295B1400.png",
+      "image": "MVB295B1400.webp",
       "sortOrder": 6,
       "needsReview": false,
       "sourcePage": 6
@@ -398,7 +398,7 @@
           "value": "13"
         }
       ],
-      "image": "MVB295B1413.png",
+      "image": "MVB295B1413.webp",
       "sortOrder": 7,
       "needsReview": false,
       "sourcePage": 6
@@ -450,7 +450,7 @@
           "value": "17"
         }
       ],
-      "image": "MVB300B1417.png",
+      "image": "MVB300B1417.webp",
       "sortOrder": 8,
       "needsReview": false,
       "sourcePage": 6
@@ -494,7 +494,7 @@
           "value": "5.5 degrees 6. Dimmming:"
         }
       ],
-      "image": "MVB580B.png",
+      "image": "MVB580B.webp",
       "sortOrder": 9,
       "needsReview": true,
       "sourcePage": 7
@@ -542,7 +542,7 @@
           "value": "10.6KG"
         }
       ],
-      "image": "MVB240S.png",
+      "image": "MVB240S.webp",
       "sortOrder": 10,
       "needsReview": false,
       "sourcePage": 7
@@ -587,7 +587,7 @@
         }
       ],
       "specs": [],
-      "image": "MVB480S.png",
+      "image": "MVB480S.webp",
       "sortOrder": 11,
       "needsReview": false,
       "sourcePage": 7
@@ -642,7 +642,7 @@
           "value": "7"
         }
       ],
-      "image": "MVB30H0707.png",
+      "image": "MVB30H0707.webp",
       "sortOrder": 12,
       "needsReview": false,
       "sourcePage": 7
@@ -694,7 +694,7 @@
           "value": "4.5°~ 45°"
         }
       ],
-      "image": "MVB280W.png",
+      "image": "MVB280W.webp",
       "sortOrder": 13,
       "needsReview": false,
       "sourcePage": 8
@@ -742,7 +742,7 @@
           "value": "4-45 °"
         }
       ],
-      "image": "MVB380Z.png",
+      "image": "MVB380Z.webp",
       "sortOrder": 14,
       "needsReview": false,
       "sourcePage": 8
@@ -784,7 +784,7 @@
         }
       ],
       "specs": [],
-      "image": "MVB175X.png",
+      "image": "MVB175X.webp",
       "sortOrder": 15,
       "needsReview": false,
       "sourcePage": 8
@@ -826,7 +826,7 @@
         }
       ],
       "specs": [],
-      "image": "MVB220X.png",
+      "image": "MVB220X.webp",
       "sortOrder": 16,
       "needsReview": false,
       "sourcePage": 8
@@ -880,7 +880,7 @@
           "value": "2"
         }
       ],
-      "image": "MVBX0200.png",
+      "image": "MVBX0200.webp",
       "sortOrder": 17,
       "needsReview": false,
       "sourcePage": 9
@@ -933,7 +933,7 @@
           "value": "15°"
         }
       ],
-      "image": "MVB120B.png",
+      "image": "MVB120B.webp",
       "sortOrder": 18,
       "needsReview": false,
       "sourcePage": 10
@@ -987,7 +987,7 @@
           "value": "17"
         }
       ],
-      "image": "MVB230B1417.png",
+      "image": "MVB230B1417.webp",
       "sortOrder": 19,
       "needsReview": false,
       "sourcePage": 11
@@ -1026,7 +1026,7 @@
         }
       ],
       "specs": [],
-      "image": "MVB180S.png",
+      "image": "MVB180S.webp",
       "sortOrder": 20,
       "needsReview": false,
       "sourcePage": 11
@@ -1080,7 +1080,7 @@
           "value": "2°"
         }
       ],
-      "image": "MVB450S.png",
+      "image": "MVB450S.webp",
       "sortOrder": 21,
       "needsReview": false,
       "sourcePage": 11
@@ -1130,7 +1130,7 @@
           "value": "4.5 ° -45 °"
         }
       ],
-      "image": "MVB120W.png",
+      "image": "MVB120W.webp",
       "sortOrder": 22,
       "needsReview": false,
       "sourcePage": 11
@@ -1178,7 +1178,7 @@
           "value": "10° 60° linear focusing"
         }
       ],
-      "image": "MVB555Z.png",
+      "image": "MVB555Z.webp",
       "sortOrder": 23,
       "needsReview": true,
       "sourcePage": 12
@@ -1224,7 +1224,7 @@
           "value": "7.7 kg"
         }
       ],
-      "image": "MVB15X.png",
+      "image": "MVB15X.webp",
       "sortOrder": 24,
       "needsReview": false,
       "sourcePage": 12
@@ -1277,7 +1277,7 @@
           "value": "2.8°~31°"
         }
       ],
-      "image": "MVS360B.png",
+      "image": "MVS360B.webp",
       "sortOrder": 25,
       "needsReview": false,
       "sourcePage": 13
@@ -1335,7 +1335,7 @@
           "value": "11"
         }
       ],
-      "image": "MVS380B1411.png",
+      "image": "MVS380B1411.webp",
       "sortOrder": 26,
       "needsReview": false,
       "sourcePage": 13
@@ -1374,7 +1374,7 @@
         }
       ],
       "specs": [],
-      "image": "MVS400B.png",
+      "image": "MVS400B.webp",
       "sortOrder": 27,
       "needsReview": false,
       "sourcePage": 13
@@ -1428,7 +1428,7 @@
           "value": "2.8°- 31°"
         }
       ],
-      "image": "MVS600S.png",
+      "image": "MVS600S.webp",
       "sortOrder": 28,
       "needsReview": false,
       "sourcePage": 13
@@ -1478,7 +1478,7 @@
           "value": "26KG"
         }
       ],
-      "image": "MVS720S.png",
+      "image": "MVS720S.webp",
       "sortOrder": 29,
       "needsReview": false,
       "sourcePage": 14
@@ -1528,7 +1528,7 @@
           "value": "28.1KG (61.9 lbs)"
         }
       ],
-      "image": "MVS720S-2.png",
+      "image": "MVS720S-2.webp",
       "sortOrder": 30,
       "needsReview": false,
       "sourcePage": 14
@@ -1582,7 +1582,7 @@
           "value": "13"
         }
       ],
-      "image": "MVS300H0913.png",
+      "image": "MVS300H0913.webp",
       "sortOrder": 31,
       "needsReview": false,
       "sourcePage": 14
@@ -1640,7 +1640,7 @@
           "value": "18"
         }
       ],
-      "image": "MVS400H1218.png",
+      "image": "MVS400H1218.webp",
       "sortOrder": 32,
       "needsReview": false,
       "sourcePage": 14
@@ -1689,7 +1689,7 @@
           "value": "2.8°-31°"
         }
       ],
-      "image": "MVS300W.png",
+      "image": "MVS300W.webp",
       "sortOrder": 33,
       "needsReview": false,
       "sourcePage": 15
@@ -1732,7 +1732,7 @@
         }
       ],
       "specs": [],
-      "image": "MVS760Z-3.png",
+      "image": "MVS760Z-3.webp",
       "sortOrder": 34,
       "needsReview": false,
       "sourcePage": 15
@@ -1790,7 +1790,7 @@
           "value": "13"
         }
       ],
-      "image": "MVS300B1413.png",
+      "image": "MVS300B1413.webp",
       "sortOrder": 35,
       "needsReview": false,
       "sourcePage": 16
@@ -1844,7 +1844,7 @@
           "value": "4-52°"
         }
       ],
-      "image": "MVS420B.png",
+      "image": "MVS420B.webp",
       "sortOrder": 36,
       "needsReview": false,
       "sourcePage": 16
@@ -1896,7 +1896,7 @@
           "value": "3.7-54°"
         }
       ],
-      "image": "MVS420W.png",
+      "image": "MVS420W.webp",
       "sortOrder": 37,
       "needsReview": false,
       "sourcePage": 16
@@ -1941,7 +1941,7 @@
         }
       ],
       "specs": [],
-      "image": "MVS760Z.png",
+      "image": "MVS760Z.webp",
       "sortOrder": 38,
       "needsReview": false,
       "sourcePage": 16
@@ -1992,7 +1992,7 @@
           "value": "5-45degree"
         }
       ],
-      "image": "MVS760Z-2.png",
+      "image": "MVS760Z-2.webp",
       "sortOrder": 39,
       "needsReview": false,
       "sourcePage": 17
@@ -2050,7 +2050,7 @@
           "value": "17"
         }
       ],
-      "image": "MVS200B1317.png",
+      "image": "MVS200B1317.webp",
       "sortOrder": 40,
       "needsReview": false,
       "sourcePage": 18
@@ -2101,7 +2101,7 @@
           "value": "4-28 degree"
         }
       ],
-      "image": "MVS60B.png",
+      "image": "MVS60B.webp",
       "sortOrder": 41,
       "needsReview": false,
       "sourcePage": 19
@@ -2156,7 +2156,7 @@
           "value": "15"
         }
       ],
-      "image": "MVS300H0915.png",
+      "image": "MVS300H0915.webp",
       "sortOrder": 42,
       "needsReview": false,
       "sourcePage": 19
@@ -2215,7 +2215,7 @@
           "value": "13"
         }
       ],
-      "image": "MVS380H0913.png",
+      "image": "MVS380H0913.webp",
       "sortOrder": 43,
       "needsReview": false,
       "sourcePage": 19
@@ -2269,7 +2269,7 @@
           "value": "17"
         }
       ],
-      "image": "MVS700F0817.png",
+      "image": "MVS700F0817.webp",
       "sortOrder": 44,
       "needsReview": true,
       "sourcePage": 19
@@ -2317,7 +2317,7 @@
           "value": "4-45 degrees"
         }
       ],
-      "image": "MVS760W.png",
+      "image": "MVS760W.webp",
       "sortOrder": 45,
       "needsReview": false,
       "sourcePage": 20
@@ -2366,7 +2366,7 @@
           "value": "18.3kg"
         }
       ],
-      "image": "MVS720Z.png",
+      "image": "MVS720Z.webp",
       "sortOrder": 46,
       "needsReview": false,
       "sourcePage": 20
@@ -2405,7 +2405,7 @@
         }
       ],
       "specs": [],
-      "image": "MVS720Z-2.png",
+      "image": "MVS720Z-2.webp",
       "sortOrder": 47,
       "needsReview": false,
       "sourcePage": 20
@@ -2459,7 +2459,7 @@
           "value": "5-17°"
         }
       ],
-      "image": "MVP600S.png",
+      "image": "MVP600S.webp",
       "sortOrder": 48,
       "needsReview": false,
       "sourcePage": 21
@@ -2507,7 +2507,7 @@
           "value": "3.9°-25.1°"
         }
       ],
-      "image": "MVP600S-3.png",
+      "image": "MVP600S-3.webp",
       "sortOrder": 49,
       "needsReview": false,
       "sourcePage": 21
@@ -2557,7 +2557,7 @@
           "value": "29.5kg"
         }
       ],
-      "image": "MVP720S.png",
+      "image": "MVP720S.webp",
       "sortOrder": 50,
       "needsReview": false,
       "sourcePage": 21
@@ -2607,7 +2607,7 @@
           "value": "30KG"
         }
       ],
-      "image": "MVP720S-2.png",
+      "image": "MVP720S-2.webp",
       "sortOrder": 51,
       "needsReview": false,
       "sourcePage": 21
@@ -2656,7 +2656,7 @@
           "value": "18.3kg"
         }
       ],
-      "image": "MVP720Z.png",
+      "image": "MVP720Z.webp",
       "sortOrder": 52,
       "needsReview": false,
       "sourcePage": 22
@@ -2700,7 +2700,7 @@
           "value": "24KG"
         }
       ],
-      "image": "MVP720Z-2.png",
+      "image": "MVP720Z-2.webp",
       "sortOrder": 53,
       "needsReview": false,
       "sourcePage": 22
@@ -2745,7 +2745,7 @@
         }
       ],
       "specs": [],
-      "image": "MVP800Z.png",
+      "image": "MVP800Z.webp",
       "sortOrder": 54,
       "needsReview": false,
       "sourcePage": 22
@@ -2799,7 +2799,7 @@
           "value": "13"
         }
       ],
-      "image": "MVP420B0013.png",
+      "image": "MVP420B0013.webp",
       "sortOrder": 55,
       "needsReview": false,
       "sourcePage": 23
@@ -2847,7 +2847,7 @@
           "value": "13"
         }
       ],
-      "image": "MVP420B1413.png",
+      "image": "MVP420B1413.webp",
       "sortOrder": 56,
       "needsReview": false,
       "sourcePage": 23
@@ -2906,7 +2906,7 @@
           "value": "19"
         }
       ],
-      "image": "MVP470H1319.png",
+      "image": "MVP470H1319.webp",
       "sortOrder": 57,
       "needsReview": false,
       "sourcePage": 23
@@ -2957,7 +2957,7 @@
           "value": "6"
         }
       ],
-      "image": "MVP600H0600.png",
+      "image": "MVP600H0600.webp",
       "sortOrder": 58,
       "needsReview": false,
       "sourcePage": 23
@@ -3009,7 +3009,7 @@
           "value": "16"
         }
       ],
-      "image": "MVP700F0016.png",
+      "image": "MVP700F0016.webp",
       "sortOrder": 59,
       "needsReview": false,
       "sourcePage": 24
@@ -3060,7 +3060,7 @@
           "value": "5-50degree"
         }
       ],
-      "image": "MVP1520W.png",
+      "image": "MVP1520W.webp",
       "sortOrder": 60,
       "needsReview": false,
       "sourcePage": 24
@@ -3111,7 +3111,7 @@
           "value": "5-50degree"
         }
       ],
-      "image": "MVP1520W-2.png",
+      "image": "MVP1520W-2.webp",
       "sortOrder": 61,
       "needsReview": false,
       "sourcePage": 24
@@ -3159,7 +3159,7 @@
           "value": "3°-30°"
         }
       ],
-      "image": "MVP600S-2.png",
+      "image": "MVP600S-2.webp",
       "sortOrder": 62,
       "needsReview": false,
       "sourcePage": 25
@@ -3217,7 +3217,7 @@
           "value": "9"
         }
       ],
-      "image": "MVP200B1309.png",
+      "image": "MVP200B1309.webp",
       "sortOrder": 63,
       "needsReview": false,
       "sourcePage": 26
@@ -3261,7 +3261,7 @@
           "value": "2"
         }
       ],
-      "image": "MVP1200F0200.png",
+      "image": "MVP1200F0200.webp",
       "sortOrder": 64,
       "needsReview": false,
       "sourcePage": 26
@@ -3315,7 +3315,7 @@
           "value": "4-50 degrees"
         }
       ],
-      "image": "MVP1480Z.png",
+      "image": "MVP1480Z.webp",
       "sortOrder": 65,
       "needsReview": false,
       "sourcePage": 26
@@ -3369,7 +3369,7 @@
           "value": "4-50 degrees"
         }
       ],
-      "image": "MVP1480Z-2.png",
+      "image": "MVP1480Z-2.webp",
       "sortOrder": 66,
       "needsReview": false,
       "sourcePage": 26
@@ -3417,7 +3417,7 @@
           "value": "7"
         }
       ],
-      "image": "MVP500Z1407.png",
+      "image": "MVP500Z1407.webp",
       "sortOrder": 67,
       "needsReview": false,
       "sourcePage": 27
@@ -3456,7 +3456,7 @@
         }
       ],
       "specs": [],
-      "image": "MVP925Z.png",
+      "image": "MVP925Z.webp",
       "sortOrder": 68,
       "needsReview": false,
       "sourcePage": 27
@@ -3506,7 +3506,7 @@
           "value": "1.3kg"
         }
       ],
-      "image": "PRB40B.png",
+      "image": "PRB40B.webp",
       "sortOrder": 69,
       "needsReview": false,
       "sourcePage": 29
@@ -3551,7 +3551,7 @@
           "value": "1.3Kg"
         }
       ],
-      "image": "PRB54B.png",
+      "image": "PRB54B.webp",
       "sortOrder": 70,
       "needsReview": true,
       "sourcePage": 29
@@ -3601,7 +3601,7 @@
           "value": "-20°C-40°C"
         }
       ],
-      "image": "PRB10H.png",
+      "image": "PRB10H.webp",
       "sortOrder": 71,
       "needsReview": false,
       "sourcePage": 29
@@ -3639,7 +3639,7 @@
           "value": "3.826KG"
         }
       ],
-      "image": "PRB120X.png",
+      "image": "PRB120X.webp",
       "sortOrder": 72,
       "needsReview": false,
       "sourcePage": 29
@@ -3684,7 +3684,7 @@
           "value": "3kg."
         }
       ],
-      "image": "PRB180X.png",
+      "image": "PRB180X.webp",
       "sortOrder": 73,
       "needsReview": false,
       "sourcePage": 29
@@ -3722,7 +3722,7 @@
           "value": "0 ~ 20 times / sec"
         }
       ],
-      "image": "PRB180X-3.png",
+      "image": "PRB180X-3.webp",
       "sortOrder": 74,
       "needsReview": false,
       "sourcePage": 30
@@ -3755,7 +3755,7 @@
           "value": "-30°C-40°C"
         }
       ],
-      "image": "PRB50X.png",
+      "image": "PRB50X.webp",
       "sortOrder": 75,
       "needsReview": false,
       "sourcePage": 30
@@ -3801,7 +3801,7 @@
           "value": "Black"
         }
       ],
-      "image": "PRB50X-2.png",
+      "image": "PRB50X-2.webp",
       "sortOrder": 76,
       "needsReview": false,
       "sourcePage": 30
@@ -3855,7 +3855,7 @@
           "value": "3.7KG"
         }
       ],
-      "image": "PRB50X-3.png",
+      "image": "PRB50X-3.webp",
       "sortOrder": 77,
       "needsReview": true,
       "sourcePage": 30
@@ -3893,7 +3893,7 @@
           "value": "6PCS/CARTON"
         }
       ],
-      "image": "PRB180X-2.png",
+      "image": "PRB180X-2.webp",
       "sortOrder": 78,
       "needsReview": false,
       "sourcePage": 31
@@ -3927,7 +3927,7 @@
           "value": "3.7KG"
         }
       ],
-      "image": "PRB180X-4.png",
+      "image": "PRB180X-4.webp",
       "sortOrder": 79,
       "needsReview": false,
       "sourcePage": 31
@@ -3961,7 +3961,7 @@
           "value": "3.7KG"
         }
       ],
-      "image": "PRB180X-5.png",
+      "image": "PRB180X-5.webp",
       "sortOrder": 80,
       "needsReview": false,
       "sourcePage": 31
@@ -3998,7 +3998,7 @@
           "value": "1.5KG"
         }
       ],
-      "image": "PRB60X.png",
+      "image": "PRB60X.webp",
       "sortOrder": 81,
       "needsReview": false,
       "sourcePage": 31
@@ -4021,7 +4021,7 @@
           "value": "100-230V"
         }
       ],
-      "image": "PRB140X.png",
+      "image": "PRB140X.webp",
       "sortOrder": 82,
       "needsReview": false,
       "sourcePage": 32
@@ -4059,7 +4059,7 @@
           "value": "6PCS/CARTON"
         }
       ],
-      "image": "PRB324X.png",
+      "image": "PRB324X.webp",
       "sortOrder": 83,
       "needsReview": false,
       "sourcePage": 33
@@ -4117,7 +4117,7 @@
           "value": "2.4kg"
         }
       ],
-      "image": "PRS40B.png",
+      "image": "PRS40B.webp",
       "sortOrder": 84,
       "needsReview": false,
       "sourcePage": 34
@@ -4175,7 +4175,7 @@
           "value": "2.4kg"
         }
       ],
-      "image": "PRS72B.png",
+      "image": "PRS72B.webp",
       "sortOrder": 85,
       "needsReview": false,
       "sourcePage": 34
@@ -4213,7 +4213,7 @@
           "value": "3000K/ 5700K"
         }
       ],
-      "image": "PRS100Z-2.png",
+      "image": "PRS100Z-2.webp",
       "sortOrder": 86,
       "needsReview": true,
       "sourcePage": 34
@@ -4260,7 +4260,7 @@
           "value": "25x25x38 mm"
         }
       ],
-      "image": "PRS180Z.png",
+      "image": "PRS180Z.webp",
       "sortOrder": 87,
       "needsReview": true,
       "sourcePage": 34
@@ -4310,7 +4310,7 @@
           "value": "3kg."
         }
       ],
-      "image": "PRS180Z-2.png",
+      "image": "PRS180Z-2.webp",
       "sortOrder": 88,
       "needsReview": false,
       "sourcePage": 34
@@ -4364,7 +4364,7 @@
           "value": "4.55kg"
         }
       ],
-      "image": "PRS200Z.png",
+      "image": "PRS200Z.webp",
       "sortOrder": 89,
       "needsReview": false,
       "sourcePage": 35
@@ -4405,7 +4405,7 @@
           "value": "4.9kg"
         }
       ],
-      "image": "PRS285Z.png",
+      "image": "PRS285Z.webp",
       "sortOrder": 90,
       "needsReview": true,
       "sourcePage": 35
@@ -4459,7 +4459,7 @@
           "value": "2kg"
         }
       ],
-      "image": "PRS40Z.png",
+      "image": "PRS40Z.webp",
       "sortOrder": 91,
       "needsReview": false,
       "sourcePage": 35
@@ -4522,7 +4522,7 @@
           "value": "56*56*42cm(4pcs/case)"
         }
       ],
-      "image": "PRS200X.png",
+      "image": "PRS200X.webp",
       "sortOrder": 92,
       "needsReview": false,
       "sourcePage": 35
@@ -4560,7 +4560,7 @@
           "value": "3000K/ 5700K"
         }
       ],
-      "image": "PRS100Z.png",
+      "image": "PRS100Z.webp",
       "sortOrder": 93,
       "needsReview": true,
       "sourcePage": 36
@@ -4595,7 +4595,7 @@
           "value": "3.1KG"
         }
       ],
-      "image": "PRS100B.png",
+      "image": "PRS100B.webp",
       "sortOrder": 94,
       "needsReview": false,
       "sourcePage": 37
@@ -4629,7 +4629,7 @@
           "value": "3.1KG"
         }
       ],
-      "image": "PRS56X.png",
+      "image": "PRS56X.webp",
       "sortOrder": 95,
       "needsReview": false,
       "sourcePage": 37
@@ -4663,7 +4663,7 @@
           "value": "3.1KG"
         }
       ],
-      "image": "PRS56X-2.png",
+      "image": "PRS56X-2.webp",
       "sortOrder": 96,
       "needsReview": false,
       "sourcePage": 37
@@ -4716,7 +4716,7 @@
           "value": "3.6KG"
         }
       ],
-      "image": "PRS270B.png",
+      "image": "PRS270B.webp",
       "sortOrder": 97,
       "needsReview": false,
       "sourcePage": 38
@@ -4774,7 +4774,7 @@
           "value": "2.4kg"
         }
       ],
-      "image": "PRP72B.png",
+      "image": "PRP72B.webp",
       "sortOrder": 98,
       "needsReview": false,
       "sourcePage": 39
@@ -4832,7 +4832,7 @@
           "value": "4.5kg"
         }
       ],
-      "image": "PRP90B.png",
+      "image": "PRP90B.webp",
       "sortOrder": 99,
       "needsReview": false,
       "sourcePage": 39
@@ -4874,7 +4874,7 @@
           "value": "5.06kg"
         }
       ],
-      "image": "PRP120X.png",
+      "image": "PRP120X.webp",
       "sortOrder": 100,
       "needsReview": false,
       "sourcePage": 40
@@ -4932,7 +4932,7 @@
           "value": "3.03kg"
         }
       ],
-      "image": "PRP40B.png",
+      "image": "PRP40B.webp",
       "sortOrder": 101,
       "needsReview": false,
       "sourcePage": 41
@@ -4990,7 +4990,7 @@
           "value": "3.03kg"
         }
       ],
-      "image": "PRP40B-2.png",
+      "image": "PRP40B-2.webp",
       "sortOrder": 102,
       "needsReview": false,
       "sourcePage": 41
@@ -5048,7 +5048,7 @@
           "value": "3.08kg"
         }
       ],
-      "image": "PRP60B.png",
+      "image": "PRP60B.webp",
       "sortOrder": 103,
       "needsReview": false,
       "sourcePage": 41
@@ -5110,7 +5110,7 @@
           "value": "4.5kg"
         }
       ],
-      "image": "PRP90B-2.png",
+      "image": "PRP90B-2.webp",
       "sortOrder": 104,
       "needsReview": true,
       "sourcePage": 41
@@ -5168,7 +5168,7 @@
           "value": "3.08kg"
         }
       ],
-      "image": "PRP90B-3.png",
+      "image": "PRP90B-3.webp",
       "sortOrder": 105,
       "needsReview": false,
       "sourcePage": 42
@@ -5210,7 +5210,7 @@
           "value": "60000hours 0-100%"
         }
       ],
-      "image": "PRP280Z.png",
+      "image": "PRP280Z.webp",
       "sortOrder": 106,
       "needsReview": true,
       "sourcePage": 42
@@ -5252,7 +5252,7 @@
           "value": "60000hours"
         }
       ],
-      "image": "PRP285Z.png",
+      "image": "PRP285Z.webp",
       "sortOrder": 107,
       "needsReview": false,
       "sourcePage": 42
@@ -5300,7 +5300,7 @@
           "value": "4.52KG"
         }
       ],
-      "image": "PRP140X.png",
+      "image": "PRP140X.webp",
       "sortOrder": 108,
       "needsReview": true,
       "sourcePage": 42
@@ -5347,7 +5347,7 @@
           "value": "2.8KG"
         }
       ],
-      "image": "PRP300X.png",
+      "image": "PRP300X.webp",
       "sortOrder": 109,
       "needsReview": false,
       "sourcePage": 42
@@ -5389,7 +5389,7 @@
           "value": "30(±5) degree"
         }
       ],
-      "image": "PRP90X.png",
+      "image": "PRP90X.webp",
       "sortOrder": 110,
       "needsReview": false,
       "sourcePage": 43
@@ -5448,7 +5448,7 @@
           "value": "6.42KG"
         }
       ],
-      "image": "PRP360B.png",
+      "image": "PRP360B.webp",
       "sortOrder": 111,
       "needsReview": false,
       "sourcePage": 44
@@ -5513,7 +5513,7 @@
           "value": "115*202*213cm 7.8KG"
         }
       ],
-      "image": "BRB500W.png",
+      "image": "BRB500W.webp",
       "sortOrder": 112,
       "needsReview": true,
       "sourcePage": 46
@@ -5570,7 +5570,7 @@
           "value": "2.6kg"
         }
       ],
-      "image": "BRB30Z.png",
+      "image": "BRB30Z.webp",
       "sortOrder": 113,
       "needsReview": false,
       "sourcePage": 46
@@ -5627,7 +5627,7 @@
           "value": "3.17kg"
         }
       ],
-      "image": "BRB30X.png",
+      "image": "BRB30X.webp",
       "sortOrder": 114,
       "needsReview": false,
       "sourcePage": 46
@@ -5671,7 +5671,7 @@
           "value": "1000x85x130mm No fan totally"
         }
       ],
-      "image": "BRB180B.png",
+      "image": "BRB180B.webp",
       "sortOrder": 115,
       "needsReview": true,
       "sourcePage": 47
@@ -5702,7 +5702,7 @@
           "value": "25 degree"
         }
       ],
-      "image": "BRB85B.png",
+      "image": "BRB85B.webp",
       "sortOrder": 116,
       "needsReview": false,
       "sourcePage": 48
@@ -5744,7 +5744,7 @@
           "value": "2.3KG"
         }
       ],
-      "image": "BRB108H.png",
+      "image": "BRB108H.webp",
       "sortOrder": 117,
       "needsReview": true,
       "sourcePage": 48
@@ -5790,7 +5790,7 @@
           "value": "IEC IN/OUT"
         }
       ],
-      "image": "BRB60Z.png",
+      "image": "BRB60Z.webp",
       "sortOrder": 118,
       "needsReview": true,
       "sourcePage": 48
@@ -5845,7 +5845,7 @@
           "value": "1030x62x58mm"
         }
       ],
-      "image": "BRS80B.png",
+      "image": "BRS80B.webp",
       "sortOrder": 119,
       "needsReview": true,
       "sourcePage": 49
@@ -5899,7 +5899,7 @@
           "value": "3.8kg"
         }
       ],
-      "image": "BRS80B-3.png",
+      "image": "BRS80B-3.webp",
       "sortOrder": 120,
       "needsReview": false,
       "sourcePage": 50
@@ -5949,7 +5949,7 @@
           "value": "-20°C-40°C"
         }
       ],
-      "image": "BRS90W.png",
+      "image": "BRS90W.webp",
       "sortOrder": 121,
       "needsReview": false,
       "sourcePage": 51
@@ -5998,7 +5998,7 @@
           "value": "9.2KG"
         }
       ],
-      "image": "BRS180B.png",
+      "image": "BRS180B.webp",
       "sortOrder": 122,
       "needsReview": false,
       "sourcePage": 52
@@ -6054,7 +6054,7 @@
           "value": "6.1kg"
         }
       ],
-      "image": "BRS80B-2.png",
+      "image": "BRS80B-2.webp",
       "sortOrder": 123,
       "needsReview": true,
       "sourcePage": 52
@@ -6111,7 +6111,7 @@
           "value": "7.4KG"
         }
       ],
-      "image": "BRS150H.png",
+      "image": "BRS150H.webp",
       "sortOrder": 124,
       "needsReview": true,
       "sourcePage": 52
@@ -6150,7 +6150,7 @@
           "value": "15.5kg"
         }
       ],
-      "image": "BRS300S0700.png",
+      "image": "BRS300S0700.webp",
       "sortOrder": 125,
       "needsReview": false,
       "sourcePage": 53
@@ -6204,7 +6204,7 @@
           "value": "13kg"
         }
       ],
-      "image": "BRP90B.png",
+      "image": "BRP90B.webp",
       "sortOrder": 126,
       "needsReview": false,
       "sourcePage": 54
@@ -6266,7 +6266,7 @@
           "value": "11kg"
         }
       ],
-      "image": "BRP40Z.png",
+      "image": "BRP40Z.webp",
       "sortOrder": 127,
       "needsReview": false,
       "sourcePage": 54
@@ -6311,7 +6311,7 @@
           "value": "10.25KG"
         }
       ],
-      "image": "BRP270B.png",
+      "image": "BRP270B.webp",
       "sortOrder": 128,
       "needsReview": true,
       "sourcePage": 55
@@ -6354,7 +6354,7 @@
           "value": "9.5kg"
         }
       ],
-      "image": "BRP400Z-2.png",
+      "image": "BRP400Z-2.webp",
       "sortOrder": 129,
       "needsReview": false,
       "sourcePage": 55
@@ -6397,7 +6397,7 @@
           "value": "9.5kg"
         }
       ],
-      "image": "BRP400Z.png",
+      "image": "BRP400Z.webp",
       "sortOrder": 130,
       "needsReview": false,
       "sourcePage": 56
@@ -6448,7 +6448,7 @@
           "value": "440x370x260mm"
         }
       ],
-      "image": "WLB150B.png",
+      "image": "WLB150B.webp",
       "sortOrder": 131,
       "needsReview": false,
       "sourcePage": 58
@@ -6489,7 +6489,7 @@
           "value": "33*25*20cm"
         }
       ],
-      "image": "WLB180W.png",
+      "image": "WLB180W.webp",
       "sortOrder": 132,
       "needsReview": true,
       "sourcePage": 58
@@ -6522,7 +6522,7 @@
           "value": "120× 150× 1100mm"
         }
       ],
-      "image": "WLB96W.png",
+      "image": "WLB96W.webp",
       "sortOrder": 133,
       "needsReview": false,
       "sourcePage": 58
@@ -6561,7 +6561,7 @@
           "value": "8.6KG"
         }
       ],
-      "image": "WLS400B.png",
+      "image": "WLS400B.webp",
       "sortOrder": 134,
       "needsReview": false,
       "sourcePage": 59
@@ -6607,7 +6607,7 @@
           "value": "70X62X56cm"
         }
       ],
-      "image": "WLS10W.png",
+      "image": "WLS10W.webp",
       "sortOrder": 135,
       "needsReview": true,
       "sourcePage": 59
@@ -6654,7 +6654,7 @@
           "value": "KG"
         }
       ],
-      "image": "WLS440W.png",
+      "image": "WLS440W.webp",
       "sortOrder": 136,
       "needsReview": true,
       "sourcePage": 59
@@ -6701,7 +6701,7 @@
           "value": "13KG"
         }
       ],
-      "image": "WLP10W.png",
+      "image": "WLP10W.webp",
       "sortOrder": 137,
       "needsReview": true,
       "sourcePage": 60
@@ -6720,7 +6720,7 @@
           "value": "LED"
         }
       ],
-      "image": "WLP480W.png",
+      "image": "WLP480W.webp",
       "sortOrder": 138,
       "needsReview": false,
       "sourcePage": 60
@@ -6739,7 +6739,7 @@
           "value": "LED"
         }
       ],
-      "image": "WLP960W.png",
+      "image": "WLP960W.webp",
       "sortOrder": 139,
       "needsReview": false,
       "sourcePage": 60
@@ -6801,7 +6801,7 @@
           "value": "3.6kgs"
         }
       ],
-      "image": "BLB200B.png",
+      "image": "BLB200B.webp",
       "sortOrder": 140,
       "needsReview": true,
       "sourcePage": 62
@@ -6848,7 +6848,7 @@
           "value": "Metal"
         }
       ],
-      "image": "BLB200B-2.png",
+      "image": "BLB200B-2.webp",
       "sortOrder": 141,
       "needsReview": false,
       "sourcePage": 62
@@ -6896,7 +6896,7 @@
           "value": "Metal"
         }
       ],
-      "image": "BLB400B.png",
+      "image": "BLB400B.webp",
       "sortOrder": 142,
       "needsReview": false,
       "sourcePage": 62
@@ -6958,7 +6958,7 @@
           "value": "5kgs"
         }
       ],
-      "image": "BLS400B.png",
+      "image": "BLS400B.webp",
       "sortOrder": 143,
       "needsReview": true,
       "sourcePage": 63
@@ -7008,7 +7008,7 @@
           "value": "Metal"
         }
       ],
-      "image": "BLS400B-2.png",
+      "image": "BLS400B-2.webp",
       "sortOrder": 144,
       "needsReview": true,
       "sourcePage": 64
@@ -7054,7 +7054,7 @@
           "value": "9.3KG"
         }
       ],
-      "image": "BLS200X.png",
+      "image": "BLS200X.webp",
       "sortOrder": 145,
       "needsReview": false,
       "sourcePage": 65
@@ -7100,7 +7100,7 @@
           "value": "7.5kg"
         }
       ],
-      "image": "BLS400X.png",
+      "image": "BLS400X.webp",
       "sortOrder": 146,
       "needsReview": true,
       "sourcePage": 66
@@ -7147,7 +7147,7 @@
           "value": "470x450x300mm"
         }
       ],
-      "image": "BLP400B.png",
+      "image": "BLP400B.webp",
       "sortOrder": 147,
       "needsReview": true,
       "sourcePage": 67
@@ -7177,7 +7177,7 @@
           "value": "DMX512, Master/Slave, Sound"
         }
       ],
-      "image": "BLP200X.png",
+      "image": "BLP200X.webp",
       "sortOrder": 148,
       "needsReview": false,
       "sourcePage": 67
@@ -7224,7 +7224,7 @@
           "value": "7KG"
         }
       ],
-      "image": "STB1000X.png",
+      "image": "STB1000X.webp",
       "sortOrder": 149,
       "needsReview": false,
       "sourcePage": 69
@@ -7271,7 +7271,7 @@
           "value": "6KG"
         }
       ],
-      "image": "STB1000X-2.png",
+      "image": "STB1000X-2.webp",
       "sortOrder": 150,
       "needsReview": true,
       "sourcePage": 69
@@ -7324,7 +7324,7 @@
           "value": "106*29*34cm"
         }
       ],
-      "image": "STB200X.png",
+      "image": "STB200X.webp",
       "sortOrder": 151,
       "needsReview": true,
       "sourcePage": 69
@@ -7365,7 +7365,7 @@
           "value": "EPE or air box"
         }
       ],
-      "image": "STB3000X.png",
+      "image": "STB3000X.webp",
       "sortOrder": 152,
       "needsReview": false,
       "sourcePage": 69
@@ -7422,7 +7422,7 @@
           "value": "13kg"
         }
       ],
-      "image": "STB300B.png",
+      "image": "STB300B.webp",
       "sortOrder": 153,
       "needsReview": true,
       "sourcePage": 70
@@ -7474,7 +7474,7 @@
           "value": "110*16.5*22cm"
         }
       ],
-      "image": "STB350H.png",
+      "image": "STB350H.webp",
       "sortOrder": 154,
       "needsReview": true,
       "sourcePage": 70
@@ -7493,7 +7493,7 @@
           "value": "LED"
         }
       ],
-      "image": "STBX.png",
+      "image": "STBX.webp",
       "sortOrder": 155,
       "needsReview": false,
       "sourcePage": 71
@@ -7552,7 +7552,7 @@
           "value": "560x340x240mm"
         }
       ],
-      "image": "STS1200B.png",
+      "image": "STS1200B.webp",
       "sortOrder": 156,
       "needsReview": true,
       "sourcePage": 72
@@ -7609,7 +7609,7 @@
           "value": "14.12KG"
         }
       ],
-      "image": "STS480H.png",
+      "image": "STS480H.webp",
       "sortOrder": 157,
       "needsReview": true,
       "sourcePage": 72
@@ -7666,7 +7666,7 @@
           "value": "6.5kg"
         }
       ],
-      "image": "STS240X.png",
+      "image": "STS240X.webp",
       "sortOrder": 158,
       "needsReview": true,
       "sourcePage": 72
@@ -7711,7 +7711,7 @@
           "value": "5.3kg"
         }
       ],
-      "image": "STS800X.png",
+      "image": "STS800X.webp",
       "sortOrder": 159,
       "needsReview": true,
       "sourcePage": 72
@@ -7776,7 +7776,7 @@
           "value": "430mm*211mm*419mm"
         }
       ],
-      "image": "STS2000H.png",
+      "image": "STS2000H.webp",
       "sortOrder": 160,
       "needsReview": true,
       "sourcePage": 73
@@ -7821,7 +7821,7 @@
           "value": "6.65kg"
         }
       ],
-      "image": "STS500H.png",
+      "image": "STS500H.webp",
       "sortOrder": 161,
       "needsReview": true,
       "sourcePage": 73
@@ -7856,7 +7856,7 @@
           "value": "9Kg"
         }
       ],
-      "image": "STS1000X.png",
+      "image": "STS1000X.webp",
       "sortOrder": 162,
       "needsReview": false,
       "sourcePage": 73
@@ -7913,7 +7913,7 @@
           "value": "11.8kg"
         }
       ],
-      "image": "STS1000H.png",
+      "image": "STS1000H.webp",
       "sortOrder": 163,
       "needsReview": true,
       "sourcePage": 74
@@ -7952,7 +7952,7 @@
           "value": "0-100% linear adjustment"
         }
       ],
-      "image": "STS450X.png",
+      "image": "STS450X.webp",
       "sortOrder": 164,
       "needsReview": false,
       "sourcePage": 74
@@ -8010,7 +8010,7 @@
           "value": "16.3KG"
         }
       ],
-      "image": "STP590B.png",
+      "image": "STP590B.webp",
       "sortOrder": 165,
       "needsReview": true,
       "sourcePage": 75
@@ -8057,7 +8057,7 @@
           "value": "10 kg"
         }
       ],
-      "image": "STP1000H.png",
+      "image": "STP1000H.webp",
       "sortOrder": 166,
       "needsReview": true,
       "sourcePage": 75
@@ -8130,7 +8130,7 @@
           "value": "24.6KG"
         }
       ],
-      "image": "STP1200H.png",
+      "image": "STP1200H.webp",
       "sortOrder": 167,
       "needsReview": false,
       "sourcePage": 75
@@ -8177,7 +8177,7 @@
           "value": "black Dimensions"
         }
       ],
-      "image": "STP2000H.png",
+      "image": "STP2000H.webp",
       "sortOrder": 168,
       "needsReview": true,
       "sourcePage": 75
@@ -8242,7 +8242,7 @@
           "value": "501.84mm*147.65mm*337.55mm"
         }
       ],
-      "image": "STP580H.png",
+      "image": "STP580H.webp",
       "sortOrder": 169,
       "needsReview": true,
       "sourcePage": 76
@@ -8280,7 +8280,7 @@
           "value": "2.78kg"
         }
       ],
-      "image": "FXB70W.png",
+      "image": "FXB70W.webp",
       "sortOrder": 170,
       "needsReview": false,
       "sourcePage": 78
@@ -8299,7 +8299,7 @@
           "value": "LED"
         }
       ],
-      "image": "FXB100X.png",
+      "image": "FXB100X.webp",
       "sortOrder": 171,
       "needsReview": false,
       "sourcePage": 78
@@ -8322,7 +8322,7 @@
           "value": "00-240V"
         }
       ],
-      "image": "FXB54X.png",
+      "image": "FXB54X.webp",
       "sortOrder": 172,
       "needsReview": false,
       "sourcePage": 78
@@ -8361,7 +8361,7 @@
           "value": "4.62kg"
         }
       ],
-      "image": "FXS180W.png",
+      "image": "FXS180W.webp",
       "sortOrder": 173,
       "needsReview": false,
       "sourcePage": 79
@@ -8407,7 +8407,7 @@
           "value": "Metal"
         }
       ],
-      "image": "FXS100B.png",
+      "image": "FXS100B.webp",
       "sortOrder": 174,
       "needsReview": false,
       "sourcePage": 80
@@ -8449,7 +8449,7 @@
           "value": "135° 16 bit"
         }
       ],
-      "image": "FXS24B.png",
+      "image": "FXS24B.webp",
       "sortOrder": 175,
       "needsReview": false,
       "sourcePage": 81
@@ -8496,7 +8496,7 @@
           "value": "6.7kg"
         }
       ],
-      "image": "FXS10W.png",
+      "image": "FXS10W.webp",
       "sortOrder": 176,
       "needsReview": false,
       "sourcePage": 81
@@ -8537,7 +8537,7 @@
           "value": "3.22kg"
         }
       ],
-      "image": "FXS25X.png",
+      "image": "FXS25X.webp",
       "sortOrder": 177,
       "needsReview": false,
       "sourcePage": 81
@@ -8593,7 +8593,7 @@
           "value": "4.6kg"
         }
       ],
-      "image": "FXP120Z.png",
+      "image": "FXP120Z.webp",
       "sortOrder": 178,
       "needsReview": false,
       "sourcePage": 82
@@ -8636,7 +8636,7 @@
           "value": "15KG"
         }
       ],
-      "image": "FXP285W.png",
+      "image": "FXP285W.webp",
       "sortOrder": 179,
       "needsReview": true,
       "sourcePage": 83
@@ -8671,7 +8671,7 @@
           "value": "9.5Kgs"
         }
       ],
-      "image": "FXP475W.png",
+      "image": "FXP475W.webp",
       "sortOrder": 180,
       "needsReview": false,
       "sourcePage": 83
@@ -8712,7 +8712,7 @@
           "value": "9.5Kgs"
         }
       ],
-      "image": "FXP475W-2.png",
+      "image": "FXP475W-2.webp",
       "sortOrder": 181,
       "needsReview": false,
       "sourcePage": 83
@@ -8743,7 +8743,7 @@
           "value": "9Kg"
         }
       ],
-      "image": "FXP576X.png",
+      "image": "FXP576X.webp",
       "sortOrder": 182,
       "needsReview": false,
       "sourcePage": 83
@@ -8793,7 +8793,7 @@
           "value": "0°C-40°C"
         }
       ],
-      "image": "PSS10Z.png",
+      "image": "PSS10Z.webp",
       "sortOrder": 183,
       "needsReview": true,
       "sourcePage": 85
@@ -8843,7 +8843,7 @@
           "value": "-20°C-40°C"
         }
       ],
-      "image": "PSS60Z.png",
+      "image": "PSS60Z.webp",
       "sortOrder": 184,
       "needsReview": true,
       "sourcePage": 85
@@ -8908,7 +8908,7 @@
           "value": "4.06kg"
         }
       ],
-      "image": "PSS60Z-2.png",
+      "image": "PSS60Z-2.webp",
       "sortOrder": 185,
       "needsReview": false,
       "sourcePage": 85
@@ -8959,7 +8959,7 @@
           "value": "0.4kg"
         }
       ],
-      "image": "PSS15Z.png",
+      "image": "PSS15Z.webp",
       "sortOrder": 186,
       "needsReview": false,
       "sourcePage": 86
@@ -8973,7 +8973,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "PSS15X.png",
+      "image": "PSS15X.webp",
       "sortOrder": 187,
       "needsReview": false,
       "sourcePage": 86
@@ -9008,7 +9008,7 @@
           "value": "700*360*365MM"
         }
       ],
-      "image": "PFS200P.png",
+      "image": "PFS200P.webp",
       "sortOrder": 188,
       "needsReview": true,
       "sourcePage": 88
@@ -9055,7 +9055,7 @@
           "value": "2.4kg"
         }
       ],
-      "image": "PFS40P.png",
+      "image": "PFS40P.webp",
       "sortOrder": 189,
       "needsReview": false,
       "sourcePage": 88
@@ -9094,7 +9094,7 @@
           "value": "Die-casting Aluminum"
         }
       ],
-      "image": "PFS20P.png",
+      "image": "PFS20P.webp",
       "sortOrder": 190,
       "needsReview": false,
       "sourcePage": 89
@@ -9134,7 +9134,7 @@
           "value": "6.5kg"
         }
       ],
-      "image": "FRS150Z.png",
+      "image": "FRS150Z.webp",
       "sortOrder": 191,
       "needsReview": true,
       "sourcePage": 91
@@ -9187,7 +9187,7 @@
           "value": "4.95KG"
         }
       ],
-      "image": "FRS200X.png",
+      "image": "FRS200X.webp",
       "sortOrder": 192,
       "needsReview": false,
       "sourcePage": 91
@@ -9233,7 +9233,7 @@
           "value": "Metal"
         }
       ],
-      "image": "FRS100B.png",
+      "image": "FRS100B.webp",
       "sortOrder": 193,
       "needsReview": false,
       "sourcePage": 92
@@ -9266,7 +9266,7 @@
           "value": "radiator, fan cooling"
         }
       ],
-      "image": "GPB150X.png",
+      "image": "GPB150X.webp",
       "sortOrder": 194,
       "needsReview": true,
       "sourcePage": 94
@@ -9315,7 +9315,7 @@
           "value": "6.89KG"
         }
       ],
-      "image": "GPB200X.png",
+      "image": "GPB200X.webp",
       "sortOrder": 195,
       "needsReview": true,
       "sourcePage": 94
@@ -9353,7 +9353,7 @@
           "value": "high-quality aluminum alloy"
         }
       ],
-      "image": "GPS200Z.png",
+      "image": "GPS200Z.webp",
       "sortOrder": 196,
       "needsReview": true,
       "sourcePage": 95
@@ -9406,7 +9406,7 @@
           "value": "6.89KG"
         }
       ],
-      "image": "GPS200X.png",
+      "image": "GPS200X.webp",
       "sortOrder": 197,
       "needsReview": true,
       "sourcePage": 95
@@ -9463,7 +9463,7 @@
           "value": "16.3KG"
         }
       ],
-      "image": "GPS400X.png",
+      "image": "GPS400X.webp",
       "sortOrder": 198,
       "needsReview": false,
       "sourcePage": 95
@@ -9521,7 +9521,7 @@
           "value": "12.5KG"
         }
       ],
-      "image": "GPP600B.png",
+      "image": "GPP600B.webp",
       "sortOrder": 199,
       "needsReview": true,
       "sourcePage": 96
@@ -9577,7 +9577,7 @@
           "value": "17.5KG"
         }
       ],
-      "image": "GPP500Z.png",
+      "image": "GPP500Z.webp",
       "sortOrder": 200,
       "needsReview": true,
       "sourcePage": 96
@@ -9610,7 +9610,7 @@
           "value": "1180*320*250mm(2in1) red laser"
         }
       ],
-      "image": "LSS70X.png",
+      "image": "LSS70X.webp",
       "sortOrder": 201,
       "needsReview": true,
       "sourcePage": 98
@@ -9659,7 +9659,7 @@
           "value": "17 kg"
         }
       ],
-      "image": "LSS150B2229.png",
+      "image": "LSS150B2229.webp",
       "sortOrder": 202,
       "needsReview": true,
       "sourcePage": 99
@@ -9697,7 +9697,7 @@
           "value": "linear dimming"
         }
       ],
-      "image": "LSS260B.png",
+      "image": "LSS260B.webp",
       "sortOrder": 203,
       "needsReview": false,
       "sourcePage": 100
@@ -9754,7 +9754,7 @@
           "value": "29.5kg"
         }
       ],
-      "image": "LSS300B1719.png",
+      "image": "LSS300B1719.webp",
       "sortOrder": 204,
       "needsReview": true,
       "sourcePage": 100
@@ -9799,7 +9799,7 @@
           "value": "3.25kg"
         }
       ],
-      "image": "LSS20X.png",
+      "image": "LSS20X.webp",
       "sortOrder": 205,
       "needsReview": false,
       "sourcePage": 101
@@ -9839,7 +9839,7 @@
           "value": "3.65KG"
         }
       ],
-      "image": "MXS130X.png",
+      "image": "MXS130X.webp",
       "sortOrder": 206,
       "needsReview": false,
       "sourcePage": 103
@@ -9884,7 +9884,7 @@
           "value": "60.5*60.5*19CM Gross Weight:"
         }
       ],
-      "image": "MXS49X.png",
+      "image": "MXS49X.webp",
       "sortOrder": 207,
       "needsReview": true,
       "sourcePage": 103
@@ -9931,7 +9931,7 @@
           "value": "10.7kg"
         }
       ],
-      "image": "MXS490X.png",
+      "image": "MXS490X.webp",
       "sortOrder": 208,
       "needsReview": true,
       "sourcePage": 104
@@ -9972,7 +9972,7 @@
           "value": "N.W. 5.5 kg / G.W. 6.0 kg"
         }
       ],
-      "image": "MXS100B.png",
+      "image": "MXS100B.webp",
       "sortOrder": 209,
       "needsReview": true,
       "sourcePage": 105
@@ -9991,7 +9991,7 @@
           "value": "Discharge lamp"
         }
       ],
-      "image": "MXS120X.png",
+      "image": "MXS120X.webp",
       "sortOrder": 210,
       "needsReview": false,
       "sourcePage": 105
@@ -10042,7 +10042,7 @@
           "value": "3.34kg"
         }
       ],
-      "image": "TBS30X.png",
+      "image": "TBS30X.webp",
       "sortOrder": 211,
       "needsReview": false,
       "sourcePage": 107
@@ -10089,7 +10089,7 @@
           "value": "-20°C-40°C"
         }
       ],
-      "image": "TBS40X.png",
+      "image": "TBS40X.webp",
       "sortOrder": 212,
       "needsReview": false,
       "sourcePage": 107
@@ -10130,7 +10130,7 @@
           "value": "-10°C-40°C"
         }
       ],
-      "image": "MBSX-2.png",
+      "image": "MBSX-2.webp",
       "sortOrder": 213,
       "needsReview": false,
       "sourcePage": 109
@@ -10144,7 +10144,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "MBSX.png",
+      "image": "MBSX.webp",
       "sortOrder": 214,
       "needsReview": false,
       "sourcePage": 110
@@ -10182,7 +10182,7 @@
           "value": "1~30Hz"
         }
       ],
-      "image": "RTB200X.png",
+      "image": "RTB200X.webp",
       "sortOrder": 215,
       "needsReview": false,
       "sourcePage": 112
@@ -10215,7 +10215,7 @@
           "value": "1~30HZ"
         }
       ],
-      "image": "RTB240X.png",
+      "image": "RTB240X.webp",
       "sortOrder": 216,
       "needsReview": false,
       "sourcePage": 112
@@ -10234,7 +10234,7 @@
           "value": "LED"
         }
       ],
-      "image": "RTS60B.png",
+      "image": "RTS60B.webp",
       "sortOrder": 217,
       "needsReview": false,
       "sourcePage": 113
@@ -10275,7 +10275,7 @@
           "value": "1~30HZ"
         }
       ],
-      "image": "RTS350W.png",
+      "image": "RTS350W.webp",
       "sortOrder": 218,
       "needsReview": false,
       "sourcePage": 113
@@ -10294,7 +10294,7 @@
           "value": "LED"
         }
       ],
-      "image": "RTS60X.png",
+      "image": "RTS60X.webp",
       "sortOrder": 219,
       "needsReview": false,
       "sourcePage": 113
@@ -10341,7 +10341,7 @@
           "value": "15kg"
         }
       ],
-      "image": "RTP420X.png",
+      "image": "RTP420X.webp",
       "sortOrder": 220,
       "needsReview": true,
       "sourcePage": 114
@@ -10387,7 +10387,7 @@
           "value": "45°C"
         }
       ],
-      "image": "RTP480X.png",
+      "image": "RTP480X.webp",
       "sortOrder": 221,
       "needsReview": false,
       "sourcePage": 114
@@ -10406,7 +10406,7 @@
           "value": "LED"
         }
       ],
-      "image": "FMB1500X-2.png",
+      "image": "FMB1500X-2.webp",
       "sortOrder": 222,
       "needsReview": false,
       "sourcePage": 116
@@ -10441,7 +10441,7 @@
           "value": "52 * 32.5 * 26cm"
         }
       ],
-      "image": "FMB1500X.png",
+      "image": "FMB1500X.webp",
       "sortOrder": 223,
       "needsReview": false,
       "sourcePage": 117
@@ -10455,7 +10455,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "FMS3000X.png",
+      "image": "FMS3000X.webp",
       "sortOrder": 224,
       "needsReview": false,
       "sourcePage": 118
@@ -10486,7 +10486,7 @@
           "value": "LW H 52*40*45CM(with flight"
         }
       ],
-      "image": "FMS600X.png",
+      "image": "FMS600X.webp",
       "sortOrder": 225,
       "needsReview": true,
       "sourcePage": 119
@@ -10521,7 +10521,7 @@
           "value": "380x330x200mm"
         }
       ],
-      "image": "FMP800B.png",
+      "image": "FMP800B.webp",
       "sortOrder": 226,
       "needsReview": true,
       "sourcePage": 120
@@ -10558,7 +10558,7 @@
           "value": "12kg"
         }
       ],
-      "image": "FMP1500X.png",
+      "image": "FMP1500X.webp",
       "sortOrder": 227,
       "needsReview": false,
       "sourcePage": 120
@@ -10572,7 +10572,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "ACBX.png",
+      "image": "ACBX.webp",
       "sortOrder": 236,
       "needsReview": false,
       "sourcePage": 126
@@ -10586,7 +10586,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "ACBX-2.png",
+      "image": "ACBX-2.webp",
       "sortOrder": 237,
       "needsReview": false,
       "sourcePage": 126
@@ -10613,7 +10613,7 @@
           "value": "0.16kg"
         }
       ],
-      "image": "ACBX-3.png",
+      "image": "ACBX-3.webp",
       "sortOrder": 238,
       "needsReview": false,
       "sourcePage": 126
@@ -10627,7 +10627,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "ACBX-4.png",
+      "image": "ACBX-4.webp",
       "sortOrder": 239,
       "needsReview": false,
       "sourcePage": 126
@@ -10641,7 +10641,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "ACBX-5.png",
+      "image": "ACBX-5.webp",
       "sortOrder": 240,
       "needsReview": false,
       "sourcePage": 126
@@ -10655,7 +10655,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "ACSX.png",
+      "image": "ACSX.webp",
       "sortOrder": 241,
       "needsReview": false,
       "sourcePage": 127
@@ -10682,7 +10682,7 @@
           "value": "0.44kg"
         }
       ],
-      "image": "ACSX-2.png",
+      "image": "ACSX-2.webp",
       "sortOrder": 242,
       "needsReview": false,
       "sourcePage": 127
@@ -10696,7 +10696,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "ACSX-3.png",
+      "image": "ACSX-3.webp",
       "sortOrder": 243,
       "needsReview": false,
       "sourcePage": 127
@@ -10710,7 +10710,7 @@
       "dmxModes": [],
       "capabilities": [],
       "specs": [],
-      "image": "ACSX-4.png",
+      "image": "ACSX-4.webp",
       "sortOrder": 244,
       "needsReview": false,
       "sourcePage": 127
@@ -10729,7 +10729,7 @@
           "value": "0.62KG"
         }
       ],
-      "image": "ACPX-3.png",
+      "image": "ACPX-3.webp",
       "sortOrder": 245,
       "needsReview": true,
       "sourcePage": 128
@@ -10756,7 +10756,7 @@
           "value": "0.59kg/piece"
         }
       ],
-      "image": "ACPX.png",
+      "image": "ACPX.webp",
       "sortOrder": 246,
       "needsReview": false,
       "sourcePage": 129
@@ -10779,7 +10779,7 @@
           "value": "Aluminum alloy"
         }
       ],
-      "image": "ACPX-2.png",
+      "image": "ACPX-2.webp",
       "sortOrder": 247,
       "needsReview": false,
       "sourcePage": 129

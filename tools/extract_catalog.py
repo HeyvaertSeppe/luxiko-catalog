@@ -1,6 +1,8 @@
 """
 One-off extractor: reads the original LUXIKO catalog PDF and writes
 seed/products.json + seed/images/<CODE>.png (+ brand assets).
+After extracting, upscale the photos to seed/images/<CODE>.webp with
+tools/upscale_photos.cjs (the app prefers the .webp versions).
 
 Usage: python3 tools/extract_catalog.py LUXIKO_Product_Catalog_2027_K1.pdf
 (also writes public/brand/hero.jpg and seed/brand/logo.png)
