@@ -22,9 +22,14 @@ export async function upgradeSeedImages() {
     .all() as { id: number; file: string; code: string }[];
   const update = db().prepare("UPDATE product_images SET file = ?, width = NULL, height = NULL WHERE id = ?");
   let n = 0;
+  let allHq = true;
   for (const row of rows) {
     const src = seedImageFor(row.code);
     if (!src) continue;
+    if (!src.endsWith(".webp")) {
+      allHq = false; // high-quality photo not shipped (yet): keep the current one
+      continue;
+    }
     const name = seedImageName(row.code);
     if (name === row.file) continue;
     fs.copyFileSync(src, uploadsDir("images", name));
@@ -32,7 +37,7 @@ export async function upgradeSeedImages() {
     fs.rmSync(uploadsDir("images", row.file), { force: true });
     n++;
   }
-  setDbSetting("seed:imagesVersion", String(SEED_IMAGES_VERSION));
+  if (allHq) setDbSetting("seed:imagesVersion", String(SEED_IMAGES_VERSION));
   if (n) console.log(`[luxiko] Replaced ${n} catalog photos with the high-quality versions`);
 }
 

@@ -166,6 +166,7 @@ function seed(db: Database.Database) {
   const insertImage = db.prepare(
     "INSERT INTO product_images (product_id, file, sort_order) VALUES (?, ?, 0)",
   );
+  let allHq = true;
   db.transaction(() => {
     for (const p of data.products) {
       const res = insert.run({
@@ -181,6 +182,7 @@ function seed(db: Database.Database) {
         sort: p.sortOrder * 10,
       });
       const src = seedImageFor(p.code);
+      if (src && !src.endsWith(".webp")) allHq = false;
       if (src) {
         const name = seedImageName(p.code);
         fs.copyFileSync(src, uploadsDir("images", name));
@@ -188,7 +190,10 @@ function seed(db: Database.Database) {
       }
     }
   })();
-  db.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('seed:imagesVersion', ?)").run(String(SEED_IMAGES_VERSION));
+  // Only mark the photos as up to date when the high-quality versions were used.
+  if (allHq) {
+    db.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('seed:imagesVersion', ?)").run(String(SEED_IMAGES_VERSION));
+  }
   console.log(`[luxiko] Seeded ${data.products.length} products from seed/products.json`);
 }
 
