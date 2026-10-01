@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CONSOLES, type ConsoleId } from "@/lib/consoles";
+import type { Brand } from "@/lib/brands";
 import type { Capability, Product, Spec } from "@/lib/products";
 import {
   AlertIcon,
@@ -40,7 +40,7 @@ function toForm(p: Product | null): Form {
   return {
     code: p?.code ?? "",
     name: p?.name ?? "",
-    section: p?.section ?? "Moving Heads",
+    section: p?.section ?? "",
     series: p?.series ?? "S",
     ip: p?.ip ?? "IP20",
     description: p?.description ?? "",
@@ -98,16 +98,16 @@ export function ProductEditor({
   initial,
   sections,
   ipRatings,
-  logos,
+  brands,
 }: {
   initial: Product | null;
   sections: string[];
   ipRatings: string[];
-  logos: Record<ConsoleId, { url: string; custom: boolean }>;
+  brands: Brand[];
 }) {
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(initial);
-  const [form, setForm] = useState<Form>(() => toForm(initial));
+  const [form, setForm] = useState<Form>(() => ({ ...toForm(initial), section: initial?.section ?? sections[0] ?? "" }));
   const [saved, setSaved] = useState<string>(() => JSON.stringify(toForm(initial)));
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
@@ -224,7 +224,7 @@ export function ProductEditor({
     if (json?.product) setProduct(json.product);
   }
 
-  async function uploadLibrary(consoleId: ConsoleId, file: File | undefined) {
+  async function uploadLibrary(consoleId: string, file: File | undefined) {
     if (!product || !file) return;
     const body = new FormData();
     body.append("console", consoleId);
@@ -236,7 +236,7 @@ export function ProductEditor({
     }
   }
 
-  async function deleteLibrary(consoleId: ConsoleId, name: string) {
+  async function deleteLibrary(consoleId: string, name: string) {
     if (!product || !confirm(`Remove the ${name} file? The download button will disappear from the website.`)) return;
     const json = await call(`lib-${consoleId}`, `/api/admin/products/${product.id}/libraries?console=${consoleId}`, { method: "DELETE" });
     if (json?.product) setProduct(json.product);
@@ -273,6 +273,17 @@ export function ProductEditor({
         </div>
         {!isNew && (
           <div className="flex gap-2">
+            <button
+              type="button"
+              className="btn-secondary cursor-pointer"
+              disabled={busy === "duplicate"}
+              onClick={async () => {
+                const json = await call("duplicate", `/api/admin/products/${product.id}/duplicate`, { method: "POST" });
+                if (json?.id) router.push(`/admin/products/${json.id}`);
+              }}
+            >
+              Duplicate
+            </button>
             <a href={`/p/${encodeURIComponent(product.code)}`} target="_blank" rel="noreferrer" className="btn-secondary">
               View on site ↗
             </a>
@@ -308,7 +319,7 @@ export function ProductEditor({
               <div>
                 <label className="field-label" htmlFor="section">Category</label>
                 <select id="section" className="field" value={form.section} onChange={(e) => set("section", e.target.value)}>
-                  {!sections.includes(form.section) && <option>{form.section}</option>}
+                  {form.section && !sections.includes(form.section) && <option>{form.section}</option>}
                   {sections.map((s) => (
                     <option key={s}>{s}</option>
                   ))}
@@ -441,28 +452,44 @@ export function ProductEditor({
             )}
           </Card>
 
-          <Card title="Console libraries" hint="A download button only shows on the website when a file is uploaded.">
+          <Card
+            title="Console libraries"
+            hint="Upload the fixture library per brand. A download button only shows on the website when a file is attached. Manage brands under Brands."
+          >
             {isNew ? (
               <p className="border border-dashed border-line p-6 text-center text-sm text-grey">Save the product first, then upload library files.</p>
+            ) : brands.length === 0 ? (
+              <p className="text-sm text-grey">
+                No brands yet — <Link href="/admin/brands" className="underline">add one under Brands</Link>.
+              </p>
             ) : (
               <ul className="space-y-2.5">
-                {CONSOLES.map((c) => {
-                  const file = product.libraries.find((l) => l.console === c.id);
-                  const inputId = `lib-${c.id}`;
+                {brands.map((c) => {
+                  const file = product.libraries.find((l) => l.console === c.slug);
+                  const inputId = `lib-${c.slug}`;
                   return (
-                    <li key={c.id} className={`flex items-center gap-3 border p-3 ${file ? "border-navy bg-white" : "border-line bg-zebra"}`}>
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden bg-white">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={logos[c.id].url} alt="" className={logos[c.id].custom ? "h-8 w-8 object-contain" : "h-11 w-11"} />
+                    <li key={c.slug} className={`flex items-center gap-3 border p-3 ${file ? "border-navy bg-white" : "border-line bg-zebra"}`}>
+                      <span className="flex h-11 w-14 shrink-0 items-center justify-center p-1" style={{ backgroundColor: c.color }}>
+                        {c.logoUrl ? (
+                          <span className="flex h-full w-full items-center justify-center bg-white p-0.5">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={c.logoUrl} alt="" className="max-h-full max-w-full object-contain" />
+                          </span>
+                        ) : (
+                          <span className="font-label text-sm font-bold" style={{ color: c.textColor }}>{c.short}</span>
+                        )}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm font-semibold text-ink">{c.name}</div>
+                        <div className="text-sm font-semibold text-ink">
+                          {c.name}
+                          {!c.enabled && <span className="ml-2 text-xs font-normal text-grey">(brand switched off — not shown)</span>}
+                        </div>
                         {file ? (
                           <a href={file.url} className="flex items-center gap-1 truncate text-xs text-ok hover:underline">
                             <FileIcon width={12} height={12} className="shrink-0" /> {file.originalName} · {formatSize(file.size)}
                           </a>
                         ) : (
-                          <div className="text-xs text-grey">No file — button hidden</div>
+                          <div className="text-xs text-grey">No file — button hidden{c.hint ? ` · ${c.hint}` : ""}</div>
                         )}
                       </div>
                       <label htmlFor={inputId} className={`btn-secondary shrink-0 cursor-pointer px-3 py-2 text-xs ${busy === inputId ? "pointer-events-none opacity-50" : ""}`}>
@@ -471,15 +498,15 @@ export function ProductEditor({
                       <input
                         id={inputId}
                         type="file"
-                        accept={c.accept}
+                        accept={c.accept || undefined}
                         className="hidden"
                         onChange={(e) => {
-                          uploadLibrary(c.id, e.target.files?.[0]);
+                          uploadLibrary(c.slug, e.target.files?.[0]);
                           e.target.value = "";
                         }}
                       />
                       {file && (
-                        <button type="button" onClick={() => deleteLibrary(c.id, c.name)} className="shrink-0 cursor-pointer p-2 text-grey hover:bg-zebra hover:text-danger" aria-label={`Remove ${c.name} file`}>
+                        <button type="button" onClick={() => deleteLibrary(c.slug, c.name)} className="shrink-0 cursor-pointer p-2 text-grey hover:bg-zebra hover:text-danger" aria-label={`Remove ${c.name} file`}>
                           <TrashIcon width={16} height={16} />
                         </button>
                       )}

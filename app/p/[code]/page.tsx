@@ -7,9 +7,9 @@ import { ProductGallery } from "@/components/ProductGallery";
 import { QuoteButton } from "@/components/QuoteDialog";
 import { ShareButton } from "@/components/ShareDialog";
 import { ArrowLeftIcon, DownloadIcon } from "@/components/icons";
-import { CONSOLES } from "@/lib/consoles";
+import { listBrands } from "@/lib/brands";
 import { SERIES_LABEL, getProductByCode, listProducts } from "@/lib/products";
-import { consoleLogos } from "@/lib/settings";
+import { quotePurposes } from "@/lib/quote-options";
 
 export const dynamic = "force-dynamic";
 
@@ -68,10 +68,11 @@ export default async function ProductPage({ params }: Props) {
   const product = getProductByCode(decodeURIComponent(code));
   if (!product) notFound();
 
-  const logos = consoleLogos();
-  const downloads = CONSOLES.map((c) => ({ c, file: product.libraries.find((l) => l.console === c.id) })).filter(
-    (d) => d.file,
-  );
+  // Only brands that are switched on AND have a file for this product get a button.
+  const downloads = listBrands({ enabledOnly: true })
+    .map((brand) => ({ brand, file: product.libraries.find((l) => l.console === brand.slug) }))
+    .filter((d) => d.file);
+  const purposes = quotePurposes();
   const related = listProducts()
     .filter((p) => p.section === product.section && p.id !== product.id)
     .sort((a, b) => Number(b.series === product.series) - Number(a.series === product.series))
@@ -124,7 +125,7 @@ export default async function ProductPage({ params }: Props) {
               </div>
 
               <div className="mt-8 hidden gap-3 lg:flex">
-                <QuoteButton code={product.code} name={product.name} image={product.images[0]?.url} className="btn-primary flex-1 py-4" />
+                <QuoteButton code={product.code} name={product.name} image={product.images[0]?.url} purposes={purposes} className="btn-primary flex-1 py-4" />
                 <ShareButton code={product.code} className="btn-secondary px-6 py-4" />
               </div>
             </div>
@@ -132,24 +133,34 @@ export default async function ProductPage({ params }: Props) {
 
           {downloads.length > 0 && (
             <section className="mt-14">
-              <div className="bar grid grid-cols-[1fr_auto]">
-                <span>Console libraries</span>
-                <span>Download</span>
-              </div>
-              <ul>
-                {downloads.map(({ c, file }, i) => (
-                  <li key={c.id} className={i % 2 ? "bg-zebra" : ""}>
-                    <a href={file!.url} download className="group flex items-center gap-4 px-3 py-3">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={logos[c.id].url} alt={`${c.name} logo`} className="h-10 w-10 shrink-0 object-contain" />
+              <div className="bar">Console libraries</div>
+              <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+                {downloads.map(({ brand, file }) => (
+                  <li key={brand.slug}>
+                    <a
+                      href={file!.url}
+                      download
+                      style={{ backgroundColor: brand.color, color: brand.textColor }}
+                      className="group flex items-center gap-4 p-3 transition-opacity hover:opacity-90"
+                    >
+                      <span className="flex h-14 w-20 shrink-0 items-center justify-center bg-white p-2">
+                        {brand.logoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={brand.logoUrl} alt={`${brand.name} logo`} className="max-h-full max-w-full object-contain" />
+                        ) : (
+                          <span className="font-label text-xl font-bold tracking-wide" style={{ color: brand.color }}>
+                            {brand.short}
+                          </span>
+                        )}
+                      </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block font-bold text-navy">{c.name}</span>
-                        <span className="block truncate text-sm text-grey">
+                        <span className="block font-bold">{brand.name}</span>
+                        <span className="block truncate text-sm opacity-80">
                           {file!.originalName} · {formatSize(file!.size)}
                         </span>
                       </span>
-                      <span className="caps flex shrink-0 items-center gap-2 text-[11px] text-navy group-hover:text-orange-dark">
-                        <DownloadIcon width={18} height={18} />
+                      <span className="caps flex shrink-0 items-center gap-2 pr-1 text-[11px]">
+                        <DownloadIcon width={20} height={20} />
                         <span className="hidden sm:inline">Download</span>
                       </span>
                     </a>
@@ -214,7 +225,7 @@ export default async function ProductPage({ params }: Props) {
       {/* Fixed action bar on phones */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
         <div className="mx-auto flex max-w-xl gap-2">
-          <QuoteButton code={product.code} name={product.name} image={product.images[0]?.url} className="btn-primary flex-1 py-3.5" />
+          <QuoteButton code={product.code} name={product.name} image={product.images[0]?.url} purposes={purposes} className="btn-primary flex-1 py-3.5" />
           <ShareButton code={product.code} className="btn-secondary px-4 py-3.5" compact />
         </div>
       </div>

@@ -7,6 +7,8 @@ export function AdminNav({ newQuotes }: { newQuotes: number }) {
   const path = usePathname();
   const items = [
     { href: "/admin", label: "Products", active: path === "/admin" || path.startsWith("/admin/products") },
+    { href: "/admin/categories", label: "Categories", active: path.startsWith("/admin/categories") },
+    { href: "/admin/brands", label: "Brands", active: path.startsWith("/admin/brands") },
     { href: "/admin/quotes", label: "Quotes", active: path.startsWith("/admin/quotes"), badge: newQuotes },
     { href: "/admin/settings", label: "Settings", active: path.startsWith("/admin/settings") },
   ];

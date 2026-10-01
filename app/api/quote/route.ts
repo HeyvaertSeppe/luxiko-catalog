@@ -4,6 +4,7 @@ import { config } from "@/lib/config";
 import { getProductByCode } from "@/lib/products";
 import { sendQuoteMails } from "@/lib/mail";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { quotePurposes } from "@/lib/quote-options";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,7 @@ const schema = z.object({
   phone: z.string().trim().max(40).default(""),
   country: z.string().trim().max(80).default(""),
   quantity: z.coerce.number().int().min(1, "Quantity must be at least 1").max(100000),
-  purpose: z.enum(["Purchase", "Rental", "Installation project", "Other"]).default("Purchase"),
+  purpose: z.string().trim().max(60).default(""),
   neededBy: z.string().trim().max(40).default(""),
   message: z.string().trim().max(3000).default(""),
   website: z.string().max(0).optional(), // honeypot: real people leave this empty
@@ -36,6 +37,10 @@ export async function POST(req: Request) {
     return Response.json({ error: parsed.error.issues[0]?.message ?? "Please check the form" }, { status: 400 });
   }
   const q = parsed.data;
+  const purposes = quotePurposes();
+  if (q.purpose && !purposes.includes(q.purpose)) {
+    return Response.json({ error: "Please choose one of the listed options" }, { status: 400 });
+  }
   const product = getProductByCode(q.code);
   if (!product) return Response.json({ error: "Unknown product" }, { status: 404 });
 

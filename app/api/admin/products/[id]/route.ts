@@ -13,6 +13,9 @@ export async function PUT(req: Request, ctx: Ctx) {
   if (!getProductById(id)) return Response.json({ error: "Not found" }, { status: 404 });
   const parsed = parseProduct(await req.json().catch(() => null));
   if (!parsed.ok) return Response.json({ error: parsed.error }, { status: 400 });
+  if (!db().prepare("SELECT 1 FROM sections WHERE name = ?").get(parsed.data.section)) {
+    return Response.json({ error: "Choose an existing category" }, { status: 400 });
+  }
   if (codeExists(parsed.data.code, id)) return Response.json({ error: "Another product already uses this code" }, { status: 409 });
   updateProduct(id, parsed.data);
   return Response.json({ product: getProductById(id) });

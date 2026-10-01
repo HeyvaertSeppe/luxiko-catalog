@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { CONSOLES, type ConsoleId } from "@/lib/consoles";
+import type { Brand } from "@/lib/brands";
 import { AlertIcon, EyeOffIcon, SearchIcon } from "../icons";
 
 export type AdminRow = {
@@ -14,18 +14,17 @@ export type AdminRow = {
   ip: string;
   image: string | null;
   imageCount: number;
-  libraries: ConsoleId[];
+  libraries: string[];
   published: boolean;
   needsReview: boolean;
   updatedAt: string;
 };
 
-const SHORT: Record<ConsoleId, string> = { grandma2: "MA2", grandma3: "MA3", chamsys: "MQ", avolites: "AVO" };
 
-export function ProductTable({ rows, sections }: { rows: AdminRow[]; sections: string[] }) {
+export function ProductTable({ rows, sections, brands }: { rows: AdminRow[]; sections: string[]; brands: Pick<Brand, "slug" | "name" | "short" | "color" | "textColor">[] }) {
   const [q, setQ] = useState("");
   const [section, setSection] = useState("");
-  const [filter, setFilter] = useState<"" | "review" | "hidden" | "nolib">("");
+  const [filter, setFilter] = useState<"" | "review" | "hidden" | "nolib" | "haslib">("");
 
   const list = useMemo(() => {
     const nq = q.toLowerCase().trim();
@@ -34,6 +33,7 @@ export function ProductTable({ rows, sections }: { rows: AdminRow[]; sections: s
       if (filter === "review" && !r.needsReview) return false;
       if (filter === "hidden" && r.published) return false;
       if (filter === "nolib" && r.libraries.length > 0) return false;
+      if (filter === "haslib" && r.libraries.length === 0) return false;
       return !nq || `${r.code} ${r.name}`.toLowerCase().includes(nq);
     });
   }, [rows, q, section, filter]);
@@ -56,6 +56,7 @@ export function ProductTable({ rows, sections }: { rows: AdminRow[]; sections: s
           <option value="review">Needs review</option>
           <option value="hidden">Hidden</option>
           <option value="nolib">No library files</option>
+          <option value="haslib">Has library files</option>
         </select>
       </div>
       <p className="mt-3 text-xs text-grey">{list.length} of {rows.length} products</p>
@@ -90,15 +91,16 @@ export function ProductTable({ rows, sections }: { rows: AdminRow[]; sections: s
                   </span>
                 </span>
                 <span className="hidden shrink-0 gap-1 sm:flex">
-                  {CONSOLES.map((c) => {
-                    const has = r.libraries.includes(c.id);
+                  {brands.map((c) => {
+                    const has = r.libraries.includes(c.slug);
                     return (
                       <span
-                        key={c.id}
+                        key={c.slug}
                         title={`${c.name}: ${has ? "uploaded" : "no file"}`}
-                        className={`w-10 py-1 text-center text-[10px] font-bold ${has ? "bg-navy text-white" : "bg-zebra text-grey"}`}
+                        style={has ? { backgroundColor: c.color, color: c.textColor } : undefined}
+                        className={`min-w-10 px-1 py-1 text-center text-[10px] font-bold ${has ? "" : "bg-zebra text-grey"}`}
                       >
-                        {SHORT[c.id]}
+                        {c.short}
                       </span>
                     );
                   })}

@@ -82,42 +82,38 @@ This prints a new password and signs out every session. You can also pass your o
 
 ## 3. Put it behind your reverse proxy
 
-The default address is **`https://catalog.luxiko.be`**. Point your reverse proxy at `http://<docker-host>:3000`. The app uses the `X-Forwarded-Proto`, `X-Forwarded-Host` and `X-Forwarded-For` headers, which every common proxy sends.
+The default address is **`https://catalog.luxiko.be`**. Your reverse proxy must pass **everything** (pages, CSS, JS, images and downloads) to `http://<docker-host>:3000`. Don't let it serve files from a local folder: the app's files only exist inside the container.
 
-**Nginx Proxy Manager:** add a Proxy Host for `catalog.luxiko.be` → forward to `http://<docker-host>:3000`. Turn on *Websockets Support* and *Block Common Exploits*, and on the SSL tab request a Let's Encrypt certificate with *Force SSL*. Under *Advanced*, allow large uploads:
+### FastPanel / nginx (catalog.luxiko.be)
 
-```nginx
-client_max_body_size 60m;
+A ready-made, tested config is in **[`deploy/nginx-catalog.luxiko.be.conf`](deploy/nginx-catalog.luxiko.be.conf)**. It already contains your IPs (`10.1.2.222` → `10.1.3.245:3000`) and certificate paths. Compared with FastPanel's default config, it:
+
+- removes the `root` folder and the `location ~* \.(jpg|…|css|js…)$` block that tries to serve files from disk
+- sends the `X-Forwarded-Host` / `X-Forwarded-Proto` headers the app needs
+- redirects HTTP to HTTPS
+- allows uploads up to 60 MB
+- caches `/_next/static/` for a year
+
+To apply it in FastPanel:
+
+1. In the site's settings, set it to proxy everything to `http://10.1.3.245:3000`, and **turn off "serve static files with nginx"**.
+2. Or replace the site's nginx config with the file above. Check and reload with `nginx -t && systemctl reload nginx`.
+
+If pages still look unstyled, test where it breaks. Run these on the nginx server:
+
+```bash
+curl -sI http://10.1.3.245:3000/ | head -1                         # app directly → HTTP/1.1 200
+CSS=$(curl -s https://catalog.luxiko.be/ | grep -o '/_next/static/css/[^"]*' | head -1)
+curl -sI "https://catalog.luxiko.be$CSS" | head -3                 # must be 200 + text/css
 ```
 
-**Plain nginx:**
+Then reload the browser with **Ctrl+F5** to clear cached files.
 
-```nginx
-server {
-    server_name catalog.luxiko.be;
-    listen 443 ssl http2;
-    # ssl_certificate … / ssl_certificate_key …
-    client_max_body_size 60m;
-    location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-}
-```
+### Other proxies
 
-**Caddy:**
-
-```
-catalog.luxiko.be {
-    request_body { max_size 60MB }
-    reverse_proxy 127.0.0.1:3000
-}
-```
-
-**Traefik:** add labels to the service in `docker-compose.yml`, for example `traefik.http.routers.luxiko.rule=Host(\`catalog.luxiko.be\`)` and `traefik.http.services.luxiko.loadbalancer.server.port=3000`.
+- **Nginx Proxy Manager:** add a Proxy Host for `catalog.luxiko.be` that forwards to `http://<docker-host>:3000`, with *Force SSL*. Under *Advanced* add `client_max_body_size 60m;`.
+- **Caddy:** `catalog.luxiko.be { reverse_proxy <docker-host>:3000 }`
+- **Traefik:** route `Host(\`catalog.luxiko.be\`)` to port 3000.
 
 If the site uses a different domain, change it in **Admin → Settings → Website** and download a fresh PDF, because the QR codes contain the address.
 
@@ -173,17 +169,36 @@ docker compose up -d
 
 ## 7. Using the admin
 
-- **Products** – search and filter. The MA2 / MA3 / MQ / AVO badges turn navy when that console's library file is uploaded. 65 products are marked **Review**: their specs were cut off in the original PDF. Check them and untick *Needs review*.
+Everything is editable from the admin. Nothing needs code changes.
+
+- **Products**
+  - Search and filter.
+  - Coloured badges show which brands have a library file.
+  - 65 products are marked **Review**: their specs were cut off in the original PDF. Check them and untick *Needs review*.
 - **Product editor**
   - Code, title, category, series, IP rating and description.
-  - Specifications, features (Yes/No), DMX modes and photos (the star makes a photo the main one).
-  - Library files for grandMA2, grandMA3, ChamSys and Avolites. **No file = no download button** on the website.
+  - Specifications, features (Yes/No) and DMX modes.
+  - Photos (the star makes a photo the main one).
+  - A library file per brand.
+  - **Duplicate** creates a hidden copy, handy for variants.
   - Untick *Visible on website* to hide a product.
-- **Quotes** – every request from the website, with a status. Each one is also e-mailed through Resend, with Reply-To set to the customer.
+- **Categories**
+  - Add, rename, re-order or delete the sections of the website and the PDF, each with its code prefix.
+  - Renaming moves the products along.
+- **Brands** (console libraries)
+  - Add, edit, re-order, switch off or delete brands: grandMA3, grandMA2, ChamSys, Avolites, or any other.
+  - Each brand has a **button colour**, a **text colour**, a **logo** (upload the official MA3, MA2, ChamSys or Avolites logo), and its allowed file types.
+  - On the website a brand's download button only appears for products where a file is attached.
+  - Library files are stored on your server, in the data volume.
+- **Quotes** – every request from the website, with a status, also e-mailed through Resend.
 - **Settings**
   - Admin account, website address, e-mail and Google sign-in, company details.
+  - **Quote form options:** add, remove, re-order or switch off options. "Rental" is off by default.
   - **Download catalog PDF**.
-  - Console logos.
+
+### Product photos
+
+The original PDF only contains 150×110 px photos; there is no higher-quality version inside it. They were upscaled 4× with an AI super-resolution model (ESRGAN) to 600×440 and saved as WebP. Existing installs get the new photos automatically on the next start; photos you uploaded yourself are never replaced. For the best result, upload the manufacturer's photos in the product editor. Uploads are converted to WebP automatically.
 
 ## 8. The PDF catalog
 

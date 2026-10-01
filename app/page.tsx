@@ -1,7 +1,8 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CatalogBrowser, type CatalogItem } from "@/components/CatalogBrowser";
-import { SECTIONS, listProducts } from "@/lib/products";
+import { listProducts } from "@/lib/products";
+import { listSections } from "@/lib/sections";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,7 @@ export default function HomePage() {
     ip: p.ip,
     image: p.images[0]?.url ?? null,
   }));
-  const sections = SECTIONS.map((s) => ({
+  const sections = listSections().map((s) => ({
     ...s,
     count: items.filter((i) => i.section === s.name).length,
   })).filter((s) => s.count > 0);

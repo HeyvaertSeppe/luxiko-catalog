@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
-import { getProductById, SECTIONS, IP_RATINGS } from "@/lib/products";
-import { consoleLogos } from "@/lib/settings";
+import { getProductById, IP_RATINGS } from "@/lib/products";
+import { listSections } from "@/lib/sections";
+import { listBrands } from "@/lib/brands";
 import { ProductEditor } from "@/components/admin/ProductEditor";
 
 export const dynamic = "force-dynamic";
@@ -11,9 +12,9 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   return (
     <ProductEditor
       initial={product}
-      sections={SECTIONS.map((s) => s.name)}
+      sections={listSections().map((s) => s.name)}
       ipRatings={IP_RATINGS}
-      logos={consoleLogos()}
+      brands={listBrands()}
     />
   );
 }

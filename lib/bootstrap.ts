@@ -1,42 +1,39 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
-import sharp from "sharp";
-import { db, uploadsDir } from "./db";
+import { SEED_IMAGES_VERSION, db, seedImageFor, seedImageName, uploadsDir } from "./db";
+import { getSetting as getDbSetting, setSetting as setDbSetting } from "./settings";
 import { ensureAdminAccount, INITIAL_PASSWORD_FILE } from "./admin-account";
 import { dataDir, getSetting, writeStore } from "./runtime-config";
 import { config } from "./config";
 
 /**
- * The photos taken from the original PDF are only 150×110 px. Upscale them
- * once (Lanczos + light sharpening) so they look clean on the website.
+ * Installs that started with older catalog photos get the AI-upscaled ones.
+ * Only photos that came from the original PDF ("seed-…") are replaced —
+ * photos uploaded in the admin are never touched.
  */
 export async function upgradeSeedImages() {
+  const current = Number(getDbSetting("seed:imagesVersion") ?? "1");
+  if (current >= SEED_IMAGES_VERSION) return;
   const rows = db()
-    .prepare("SELECT id, file FROM product_images WHERE file LIKE 'seed-%.png'")
-    .all() as { id: number; file: string }[];
-  if (!rows.length) return;
-  const update = db().prepare("UPDATE product_images SET file = ?, width = ?, height = ? WHERE id = ?");
+    .prepare(
+      `SELECT pi.id, pi.file, p.code FROM product_images pi JOIN products p ON p.id = pi.product_id
+       WHERE pi.file LIKE 'seed-%'`,
+    )
+    .all() as { id: number; file: string; code: string }[];
+  const update = db().prepare("UPDATE product_images SET file = ?, width = NULL, height = NULL WHERE id = ?");
+  let n = 0;
   for (const row of rows) {
-    const src = uploadsDir("images", row.file);
-    if (!fs.existsSync(src)) continue;
-    try {
-      const meta = await sharp(src).metadata();
-      const factor = meta.width && meta.width < 600 ? 3 : 1;
-      const out = await sharp(src)
-        .flatten({ background: "#ffffff" })
-        .resize({ width: (meta.width ?? 150) * factor, kernel: "lanczos3" })
-        .sharpen({ sigma: 0.7 })
-        .webp({ quality: 90 })
-        .toBuffer({ resolveWithObject: true });
-      const name = row.file.replace(/\.png$/, ".webp");
-      fs.writeFileSync(uploadsDir("images", name), out.data);
-      update.run(name, out.info.width, out.info.height, row.id);
-      fs.rmSync(src, { force: true });
-    } catch (err) {
-      console.warn(`[luxiko] Could not upscale ${row.file}:`, err);
-    }
+    const src = seedImageFor(row.code);
+    if (!src) continue;
+    const name = seedImageName(row.code);
+    if (name === row.file) continue;
+    fs.copyFileSync(src, uploadsDir("images", name));
+    update.run(name, row.id);
+    fs.rmSync(uploadsDir("images", row.file), { force: true });
+    n++;
   }
-  console.log(`[luxiko] Upscaled ${rows.length} catalog photos`);
+  setDbSetting("seed:imagesVersion", String(SEED_IMAGES_VERSION));
+  if (n) console.log(`[luxiko] Replaced ${n} catalog photos with the high-quality versions`);
 }
 
 let started: Promise<void> | null = null;

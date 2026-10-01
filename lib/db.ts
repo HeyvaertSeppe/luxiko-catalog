@@ -2,6 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 import Database from "better-sqlite3";
 import { config } from "./config";
+import { DEFAULT_BRANDS, DEFAULT_SECTIONS } from "./defaults";
+
+const q = (v: string) => `'${v.replace(/'/g, "''")}'`;
 
 let instance: Database.Database | null = null;
 
@@ -75,6 +78,34 @@ const MIGRATIONS: string[] = [
     value  TEXT NOT NULL
   );
   `,
+  // 2: editable categories and library brands (were hard-coded)
+  `
+  CREATE TABLE sections (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT NOT NULL UNIQUE,
+    prefix      TEXT NOT NULL DEFAULT '',
+    sort_order  INTEGER NOT NULL DEFAULT 0
+  );
+  ${DEFAULT_SECTIONS.map((s, i) => `INSERT INTO sections (name, prefix, sort_order) VALUES (${q(s.name)}, ${q(s.prefix)}, ${(i + 1) * 10});`).join("\n  ")}
+  INSERT OR IGNORE INTO sections (name, prefix, sort_order)
+    SELECT DISTINCT section, upper(substr(section, 1, 2)), 1000 FROM products WHERE section != '';
+
+  CREATE TABLE library_brands (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug        TEXT NOT NULL UNIQUE,
+    name        TEXT NOT NULL,
+    short       TEXT NOT NULL DEFAULT '',
+    hint        TEXT NOT NULL DEFAULT '',
+    accept      TEXT NOT NULL DEFAULT '',
+    color       TEXT NOT NULL DEFAULT '#202a4b',
+    text_color  TEXT NOT NULL DEFAULT '#ffffff',
+    logo        TEXT,
+    enabled     INTEGER NOT NULL DEFAULT 1,
+    sort_order  INTEGER NOT NULL DEFAULT 0
+  );
+  ${DEFAULT_BRANDS.map((b, i) => `INSERT INTO library_brands (slug, name, short, hint, accept, color, text_color, logo, sort_order) VALUES (${q(b.slug)}, ${q(b.name)}, ${q(b.short)}, ${q(b.hint)}, ${q(b.accept)}, ${q(b.color)}, ${q(b.textColor)}, (SELECT value FROM settings WHERE key = ${q("consoleLogo:" + b.slug)}), ${(i + 1) * 10});`).join("\n  ")}
+  DELETE FROM settings WHERE key LIKE 'consoleLogo:%';
+  `,
 ];
 
 function migrate(db: Database.Database) {
@@ -102,6 +133,22 @@ type SeedFile = {
     needsReview: boolean;
   }[];
 };
+
+/** Version of the photos in seed/images (2 = AI-upscaled WebP). */
+export const SEED_IMAGES_VERSION = 2;
+
+/** Best photo for a product in seed/images (AI-upscaled WebP, else the original PNG). */
+export function seedImageFor(code: string): string | null {
+  for (const ext of [".webp", ".png"]) {
+    const file = path.join(process.cwd(), "seed", "images", `${code}${ext}`);
+    if (fs.existsSync(file)) return file;
+  }
+  return null;
+}
+
+export function seedImageName(code: string) {
+  return `seed-${code.toLowerCase().replace(/[^a-z0-9-]/g, "_")}-v${SEED_IMAGES_VERSION}${seedImageFor(code)?.endsWith(".png") ? ".png" : ".webp"}`;
+}
 
 /** First start: import the products that were extracted from the original PDF. */
 function seed(db: Database.Database) {
@@ -133,16 +180,15 @@ function seed(db: Database.Database) {
         review: p.needsReview ? 1 : 0,
         sort: p.sortOrder * 10,
       });
-      if (p.image) {
-        const src = path.join(seedDir, "images", p.image);
-        if (fs.existsSync(src)) {
-          const name = `seed-${p.image.toLowerCase()}`;
-          fs.copyFileSync(src, uploadsDir("images", name));
-          insertImage.run(res.lastInsertRowid, name);
-        }
+      const src = seedImageFor(p.code);
+      if (src) {
+        const name = seedImageName(p.code);
+        fs.copyFileSync(src, uploadsDir("images", name));
+        insertImage.run(res.lastInsertRowid, name);
       }
     }
   })();
+  db.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('seed:imagesVersion', ?)").run(String(SEED_IMAGES_VERSION));
   console.log(`[luxiko] Seeded ${data.products.length} products from seed/products.json`);
 }
 

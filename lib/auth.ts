@@ -90,24 +90,30 @@ export async function requireAdminPage(): Promise<Session> {
   return session;
 }
 
-/** Hosts this site is reachable on: the request host, the proxy's forwarded host and SITE_URL. */
-function allowedHosts(req: Request) {
-  const hosts = new Set<string>();
-  const add = (h: string | null | undefined) => h && hosts.add(h.split(",")[0].trim().toLowerCase());
+/** Host names this site is reachable on: request host, the proxy's forwarded host and SITE_URL. */
+function allowedHostnames(req: Request) {
+  const names = new Set<string>();
+  const add = (h: string | null | undefined) => {
+    const host = h?.split(",")[0]?.trim().toLowerCase();
+    if (host) names.add(host.replace(/:\d+$/, ""));
+  };
   add(req.headers.get("host"));
   add(req.headers.get("x-forwarded-host"));
   try {
     add(new URL(config.siteUrl).host);
   } catch {}
-  return hosts;
+  return names;
 }
 
-/** Blocks cross-site form posts / fetches (CSRF) by checking Origin / Referer. */
+/**
+ * Blocks cross-site form posts / fetches (CSRF) by checking Origin / Referer.
+ * Ports are ignored, because many reverse proxies drop them from the Host header.
+ */
 export function sameOrigin(req: Request) {
   const source = req.headers.get("origin") ?? req.headers.get("referer");
   if (!source || source === "null") return req.headers.get("sec-fetch-site") !== "cross-site";
   try {
-    return allowedHosts(req).has(new URL(source).host.toLowerCase());
+    return allowedHostnames(req).has(new URL(source).hostname.toLowerCase());
   } catch {
     return false;
   }

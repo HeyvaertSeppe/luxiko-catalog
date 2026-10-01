@@ -3,7 +3,8 @@ import path from "node:path";
 import PDFDocument from "pdfkit";
 import QRCode from "qrcode";
 import sharp from "sharp";
-import { IP_RATINGS, SECTIONS, SERIES_LABEL, sectionIndex, sectionSlug, type Product } from "../products";
+import { IP_RATINGS, SERIES_LABEL, sectionSlug, type Product } from "../products";
+import { listSections, sectionOrder } from "../sections";
 
 /* ────────────────────────────────────────────────────────────────────────────
    LUXIKO printable catalog (A4), in the house style of the original 2027
@@ -106,8 +107,10 @@ function label(
 
 export async function buildCatalogPdf(opts: CatalogOptions): Promise<Buffer> {
   const year = opts.year ?? 2027;
+  const order = sectionOrder();
+  const SECTIONS = listSections();
   const products = [...opts.products].sort(
-    (a, b) => sectionIndex(a.section) - sectionIndex(b.section) || a.sortOrder - b.sortOrder,
+    (a, b) => order(a.section) - order(b.section) || a.sortOrder - b.sortOrder,
   );
   const sections = [...new Set(products.map((p) => p.section))];
   const productUrl = (code: string) => `${opts.siteUrl}/p/${encodeURIComponent(code)}`;

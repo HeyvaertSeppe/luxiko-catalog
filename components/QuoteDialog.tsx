@@ -10,11 +10,13 @@ export function QuoteButton({
   code,
   name,
   image,
+  purposes,
   className,
 }: {
   code: string;
   name: string;
   image?: string;
+  purposes: string[];
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -97,15 +99,16 @@ export function QuoteButton({
               <label className="field-label" htmlFor={`${uid}-q-qty`}>Quantity *</label>
               <input id={`${uid}-q-qty`} name="quantity" type="number" min={1} defaultValue={1} required inputMode="numeric" className="field" />
             </div>
-            <div>
-              <label className="field-label" htmlFor={`${uid}-q-purpose`}>For</label>
-              <select id={`${uid}-q-purpose`} name="purpose" className="field" defaultValue="Purchase">
-                <option>Purchase</option>
-                <option>Rental</option>
-                <option>Installation project</option>
-                <option>Other</option>
-              </select>
-            </div>
+            {purposes.length > 0 && (
+              <div>
+                <label className="field-label" htmlFor={`${uid}-q-purpose`}>For</label>
+                <select id={`${uid}-q-purpose`} name="purpose" className="field" defaultValue={purposes[0]}>
+                  {purposes.map((p) => (
+                    <option key={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
               <label className="field-label" htmlFor={`${uid}-q-country`}>Country</label>
               <input id={`${uid}-q-country`} name="country" autoComplete="country-name" className="field" />

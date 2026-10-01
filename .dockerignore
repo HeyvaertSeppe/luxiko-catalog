@@ -8,3 +8,7 @@ data
 tools
 *.pdf
 .ccr-*
+# Stray copies of the project inside the project folder (e.g. cloned twice)
+luxiko-catalog
+*/package.json
+*/node_modules

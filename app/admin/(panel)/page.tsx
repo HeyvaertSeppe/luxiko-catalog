@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { listProducts, SECTIONS } from "@/lib/products";
+import { listProducts } from "@/lib/products";
+import { listSections } from "@/lib/sections";
+import { listBrands } from "@/lib/brands";
 import { PlusIcon } from "@/components/icons";
 import { ProductTable, type AdminRow } from "@/components/admin/ProductTable";
 import { missingSettings } from "@/lib/config";
@@ -55,7 +57,7 @@ export default function AdminProductsPage() {
           </div>
         ))}
       </div>
-      <ProductTable rows={rows} sections={SECTIONS.map((s) => s.name)} />
+      <ProductTable rows={rows} sections={listSections().map((s) => s.name)} brands={listBrands()} />
     </div>
   );
 }

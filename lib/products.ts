@@ -1,5 +1,5 @@
 import { db } from "./db";
-import type { ConsoleId } from "./consoles";
+import { sectionOrder } from "./sections";
 
 export type Spec = { label: string; value: string };
 export type Capability = { label: string; enabled: boolean };
@@ -7,7 +7,7 @@ export type Capability = { label: string; enabled: boolean };
 export type ProductImage = { id: number; file: string; url: string };
 export type LibraryFile = {
   id: number;
-  console: ConsoleId;
+  console: string;
   originalName: string;
   size: number;
   uploadedAt: string;
@@ -39,30 +39,7 @@ export const SERIES_LABEL: Record<string, string> = {
   P: "Premium",
 };
 
-/** Canonical section order, taken from the original catalog. */
-export const SECTIONS = [
-  { name: "Moving Heads", prefix: "MV" },
-  { name: "PAR Cans", prefix: "PR" },
-  { name: "LED & Pixel Bars", prefix: "BR" },
-  { name: "Wash / City Colors", prefix: "WL" },
-  { name: "Blinders", prefix: "BL" },
-  { name: "Strobes", prefix: "ST" },
-  { name: "Effect Lights", prefix: "FX" },
-  { name: "Pinspots", prefix: "PS" },
-  { name: "Profiles & Spots", prefix: "PF" },
-  { name: "Fresnels", prefix: "FR" },
-  { name: "Gobo Projectors", prefix: "GP" },
-  { name: "Lasers", prefix: "LS" },
-  { name: "Matrix Panels", prefix: "MX" },
-  { name: "Tube Lights", prefix: "TB" },
-  { name: "Mirror Balls", prefix: "MB" },
-  { name: "Retro & Vintage", prefix: "RT" },
-  { name: "Fog & Haze Machines", prefix: "FM" },
-  { name: "Controllers", prefix: "CT" },
-  { name: "Accessories", prefix: "AC" },
-];
-
-export const IP_RATINGS = ["IP20", "IP25", "IP54", "IP56", "IP65", "IP66", "OUTDOOR", "IP N/A"];
+export { DEFAULT_IP_RATINGS as IP_RATINGS } from "./defaults";
 
 export function sectionSlug(name: string) {
   return name
@@ -117,7 +94,7 @@ function hydrate(rows: Row[]): Product[] {
     .all(...ids) as {
     id: number;
     product_id: number;
-    console: ConsoleId;
+    console: string;
     original_name: string;
     size: number;
     uploaded_at: string;
@@ -157,14 +134,10 @@ function hydrate(rows: Row[]): Product[] {
 const SELECT = `SELECT id, code, name, section, series, ip, description, dmx_modes, capabilities, specs,
   published, needs_review, sort_order, updated_at FROM products`;
 
-export function sectionIndex(section: string) {
-  const i = SECTIONS.findIndex((s) => s.name === section);
-  return i === -1 ? SECTIONS.length : i;
-}
-
 function sortProducts(list: Product[]) {
+  const order = sectionOrder();
   return list.sort(
-    (a, b) => sectionIndex(a.section) - sectionIndex(b.section) || a.sortOrder - b.sortOrder || a.code.localeCompare(b.code),
+    (a, b) => order(a.section) - order(b.section) || a.sortOrder - b.sortOrder || a.code.localeCompare(b.code),
   );
 }
 

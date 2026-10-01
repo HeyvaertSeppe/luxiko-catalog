@@ -1,5 +1,6 @@
 import { requireAdminApi } from "@/lib/auth";
-import { isConsoleId } from "@/lib/consoles";
+import path from "node:path";
+import { acceptedExtensions, getBrand } from "@/lib/brands";
 import { db } from "@/lib/db";
 import { getProductById, touchProduct } from "@/lib/products";
 import { removeUpload, saveLibrary } from "@/lib/storage";
@@ -15,8 +16,14 @@ export async function POST(req: Request, ctx: Ctx) {
   const form = await req.formData();
   const consoleId = String(form.get("console") ?? "");
   const file = form.get("file");
-  if (!isConsoleId(consoleId)) return Response.json({ error: "Unknown console" }, { status: 400 });
+  const brand = getBrand(consoleId);
+  if (!brand) return Response.json({ error: "Unknown brand" }, { status: 400 });
   if (!(file instanceof File)) return Response.json({ error: "No file received" }, { status: 400 });
+  const allowed = acceptedExtensions(brand);
+  const ext = path.extname(file.name).toLowerCase();
+  if (allowed.length && !allowed.includes(ext)) {
+    return Response.json({ error: `${brand.name} accepts ${allowed.join(", ")} files` }, { status: 400 });
+  }
 
   let saved;
   try {

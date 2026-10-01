@@ -1,11 +1,11 @@
-import { CONSOLES } from "@/lib/consoles";
+import Link from "next/link";
 import { config } from "@/lib/config";
-import { consoleLogos } from "@/lib/settings";
+import { quoteOptions } from "@/lib/quote-options";
 import { getSetting, settingSource } from "@/lib/runtime-config";
 import { SETTINGS_GROUPS } from "@/lib/settings-schema";
 import { getAdminAccount } from "@/lib/admin-account";
 import { getSession } from "@/lib/auth";
-import { ConsoleLogoForm } from "@/components/admin/ConsoleLogoForm";
+import { QuoteOptionsForm } from "@/components/admin/QuoteOptionsForm";
 import { SettingsForm, type FieldState } from "@/components/admin/SettingsForm";
 import { AccountForm } from "@/components/admin/AccountForm";
 import { DownloadIcon } from "@/components/icons";
@@ -13,7 +13,6 @@ import { DownloadIcon } from "@/components/icons";
 export const dynamic = "force-dynamic";
 
 export default async function SettingsPage() {
-  const logos = consoleLogos();
   const account = getAdminAccount();
   const session = await getSession();
 
@@ -71,16 +70,20 @@ export default async function SettingsPage() {
       </section>
 
       <section className="panel">
-        <div className="bar">Console logos</div>
+        <div className="bar">Quote form</div>
         <div className="p-6">
-          <p className="max-w-2xl text-sm text-grey">
-            Shown on the library download buttons. Upload the official logos (PNG or SVG with a transparent or white background) to replace the built-in badges.
+          <p className="mb-4 max-w-2xl text-sm text-grey">
+            The options of the &ldquo;For&rdquo; field in the quote form. Untick to hide an option, or remove it. With no options ticked the field is hidden.
           </p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {CONSOLES.map((c) => (
-              <ConsoleLogoForm key={c.id} id={c.id} name={c.name} url={logos[c.id].url} custom={logos[c.id].custom} />
-            ))}
-          </div>
+          <QuoteOptionsForm initial={quoteOptions()} />
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="bar">Library brands &amp; categories</div>
+        <div className="flex flex-wrap gap-3 p-6">
+          <Link href="/admin/brands" className="btn-secondary">Manage library brands, colours &amp; logos</Link>
+          <Link href="/admin/categories" className="btn-secondary">Manage categories</Link>
         </div>
       </section>
     </div>
