@@ -8,7 +8,7 @@ export default function QuotesPage() {
   const rows = db()
     .prepare(
       `SELECT q.id, q.product_code AS productCode, p.id AS productId, q.name, q.company, q.email, q.phone, q.country,
-              q.quantity, q.purpose, q.needed_by AS neededBy, q.message, q.status, q.email_sent AS emailSent, q.created_at AS createdAt
+              q.quantity, q.purpose, q.needed_by AS neededBy, q.message, q.status, q.email_sent AS emailSent, q.created_at AS createdAt, q.lang
        FROM quotes q LEFT JOIN products p ON p.id = q.product_id ORDER BY q.id DESC LIMIT 500`,
     )
     .all() as QuoteRow[];

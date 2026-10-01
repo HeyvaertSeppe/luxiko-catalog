@@ -106,6 +106,10 @@ const MIGRATIONS: string[] = [
   ${DEFAULT_BRANDS.map((b, i) => `INSERT INTO library_brands (slug, name, short, hint, accept, color, text_color, logo, sort_order) VALUES (${q(b.slug)}, ${q(b.name)}, ${q(b.short)}, ${q(b.hint)}, ${q(b.accept)}, ${q(b.color)}, ${q(b.textColor)}, (SELECT value FROM settings WHERE key = ${q("consoleLogo:" + b.slug)}), ${(i + 1) * 10});`).join("\n  ")}
   DELETE FROM settings WHERE key LIKE 'consoleLogo:%';
   `,
+  // 3: website language the quote was sent from (confirmation mail in that language)
+  `
+  ALTER TABLE quotes ADD COLUMN lang TEXT NOT NULL DEFAULT 'en';
+  `,
 ];
 
 function migrate(db: Database.Database) {

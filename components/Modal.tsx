@@ -7,11 +7,13 @@ export function Modal({
   open,
   onClose,
   title,
+  closeLabel = "Close",
   children,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
+  closeLabel?: string;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -34,7 +36,7 @@ export function Modal({
     >
       <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-white px-5 py-4 sm:px-6">
         <h2 className="text-2xl tracking-tight text-ink">{title}</h2>
-        <button onClick={onClose} className="-mr-2 cursor-pointer p-2 text-grey hover:text-navy" aria-label="Close">
+        <button onClick={onClose} className="-mr-2 cursor-pointer p-2 text-grey hover:text-navy" aria-label={closeLabel}>
           <XIcon />
         </button>
       </div>

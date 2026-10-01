@@ -19,6 +19,7 @@ export type QuoteRow = {
   status: string;
   emailSent: number;
   createdAt: string;
+  lang: string;
 };
 
 const STATUS: Record<string, string> = {
@@ -69,6 +70,7 @@ export function QuoteList({ rows: initial }: { rows: QuoteRow[] }) {
                   ["Country", q.country],
                   ["For", q.purpose],
                   ["Needed by", q.neededBy],
+                  ["Language", ({ en: "English", nl: "Dutch", fr: "French" } as Record<string, string>)[q.lang] ?? q.lang],
                   ["E-mail sent", q.emailSent ? "Yes" : "No"],
                 ]
                   .filter(([, v]) => v)

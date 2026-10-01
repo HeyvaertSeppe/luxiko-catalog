@@ -239,6 +239,17 @@ The original PDF only contains 150×110 px photos; there is no higher-quality ve
 
 Every QR code opens `https://catalog.luxiko.be/p/<PRODUCT CODE>`, using the website address from Settings. After changing the address, products or photos, download a fresh copy: **Admin → Settings → Download catalog PDF**.
 
+### Languages
+
+The website is in **English, Dutch and French**: `/en/…`, `/nl/…`, `/fr/…`.
+
+- A link without a language picks one automatically. This covers QR codes, short links and `catalog.luxiko.be`.
+- It uses the language set on the visitor's phone or computer, and falls back to English for any other language.
+- The **EN | NL | FR** switch at the top of every page changes the language, and the choice is remembered on that device.
+- The quote confirmation e-mail goes out in the visitor's language. The quote list in the admin shows which language they used.
+- The category, spec, feature and quote option names that come with the catalog are translated. Product names and descriptions you type in the admin are shown as you wrote them.
+- Translations live in `lib/i18n.ts`.
+
 ## 9. Handy commands
 
 | Task | Command |

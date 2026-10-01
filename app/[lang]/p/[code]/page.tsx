@@ -10,21 +10,11 @@ import { ArrowLeftIcon, DownloadIcon } from "@/components/icons";
 import { listBrands } from "@/lib/brands";
 import { SERIES_LABEL, getProductByCode, listProducts } from "@/lib/products";
 import { quotePurposes } from "@/lib/quote-options";
+import { LOCALES, fmt, getDict, href, isLocale, tFeature, tPurpose, tSection, tSeries, tSpec, type Locale } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ code: string }> };
-
-const IP_TEXT: Record<string, string> = {
-  IP20: "Indoor only",
-  IP25: "Indoor, protected against dripping water",
-  IP54: "Covered outdoor, splash proof",
-  IP56: "Covered outdoor, resists powerful jets",
-  IP65: "Outdoor, dust tight, protected against water jets",
-  IP66: "Outdoor, heavy weather",
-  OUTDOOR: "Sold as outdoor, no IP number stated",
-  "IP N/A": "No IP rating stated, treat as indoor",
-};
+type Props = { params: Promise<{ lang: string; code: string }> };
 
 function formatSize(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -33,13 +23,16 @@ function formatSize(bytes: number) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { code } = await params;
+  const { lang, code } = await params;
+  const t = getDict(lang);
   const p = getProductByCode(decodeURIComponent(code));
-  if (!p) return { title: "Product not found" };
-  const description = `${p.code} — ${p.name}. ${p.section}, ${p.ip}. Specifications, console libraries and quote request.`;
+  if (!p) return { title: t.meta.notFound };
+  const description = fmt(t.meta.productDescription, { code: p.code, name: p.name, section: tSection(lang, p.section), ip: p.ip });
+  const path = `/p/${encodeURIComponent(p.code)}`;
   return {
     title: `${p.code} ${p.name}`,
     description,
+    alternates: { languages: Object.fromEntries(LOCALES.map((l) => [l, `/${l}${path}`])) },
     openGraph: { title: `${p.code} · ${p.name}`, description, images: p.images[0] ? [p.images[0].url] : [] },
   };
 }
@@ -64,7 +57,10 @@ function Table({ head, rows }: { head: [string, string]; rows: [React.ReactNode,
 }
 
 export default async function ProductPage({ params }: Props) {
-  const { code } = await params;
+  const { lang: langParam, code } = await params;
+  if (!isLocale(langParam)) notFound();
+  const lang: Locale = langParam;
+  const t = getDict(lang);
   const product = getProductByCode(decodeURIComponent(code));
   if (!product) notFound();
 
@@ -72,47 +68,61 @@ export default async function ProductPage({ params }: Props) {
   const downloads = listBrands({ enabledOnly: true })
     .map((brand) => ({ brand, file: product.libraries.find((l) => l.console === brand.slug) }))
     .filter((d) => d.file);
-  const purposes = quotePurposes();
+  // Option values stay as set in the admin (validated on the server); labels are translated.
+  const purposes = quotePurposes().map((value) => ({ value, label: tPurpose(lang, value) }));
   const related = listProducts()
     .filter((p) => p.section === product.section && p.id !== product.id)
     .sort((a, b) => Number(b.series === product.series) - Number(a.series === product.series))
     .slice(0, 6);
+  const sectionName = tSection(lang, product.section);
+  const seriesName = product.series ? tSeries(lang, SERIES_LABEL[product.series]) : null;
 
   const overview: [string, React.ReactNode][] = [
-    ["Section", product.section],
-    ...(product.series ? ([["Series", `${SERIES_LABEL[product.series]}`]] as [string, string][]) : []),
+    [t.product.section, sectionName],
+    ...(seriesName ? ([[t.product.series, seriesName]] as [string, string][]) : []),
     [
-      "IP rating",
+      t.product.ipRating,
       <>
-        {product.ip} <span className="text-grey">· {IP_TEXT[product.ip] ?? ""}</span>
+        {product.ip} <span className="text-grey">· {t.ip[product.ip] ?? ""}</span>
       </>,
     ],
-    ["DMX modes", product.dmxModes.length ? product.dmxModes.join(" / ") : "On request"],
+    [t.product.dmxModes, product.dmxModes.length ? product.dmxModes.join(" / ") : t.product.onRequest],
   ];
+
+  const quoteProps = {
+    code: product.code,
+    name: product.name,
+    image: product.images[0]?.url,
+    purposes,
+    lang,
+    t: t.quote,
+    closeLabel: t.modal.close,
+  };
+  const shareProps = { code: product.code, t: t.share, label: t.product.shareLabel, closeLabel: t.modal.close };
 
   return (
     <>
-      <SiteHeader>
-        <Link href="/" className="btn-secondary hidden px-4 py-2 sm:inline-flex">
-          <ArrowLeftIcon width={16} height={16} /> Catalog
+      <SiteHeader lang={lang}>
+        <Link href={href(lang)} className="btn-secondary hidden px-4 py-2 sm:inline-flex">
+          <ArrowLeftIcon width={16} height={16} /> {t.header.catalog}
         </Link>
       </SiteHeader>
 
       <main className="pb-28 lg:pb-0">
         <div className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 sm:pt-10">
           <nav className="mb-6 text-sm text-grey" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-navy">Catalog</Link>
+            <Link href={href(lang)} className="hover:text-navy">{t.product.catalog}</Link>
             <span className="mx-2">/</span>
-            <span className="text-navy">{product.section}</span>
+            <span className="text-navy">{sectionName}</span>
           </nav>
 
           <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-14">
-            <ProductGallery images={product.images} alt={`${product.code} ${product.name}`} />
+            <ProductGallery images={product.images} alt={`${product.code} ${product.name}`} photoSoon={t.product.photoSoon} photoLabel={t.product.photo} />
 
             <div>
               <p className="flex flex-wrap items-baseline gap-x-3">
                 <span className="caps text-lg text-navy sm:text-xl">
-                  {product.series ? `${SERIES_LABEL[product.series]} series` : product.section}
+                  {seriesName ? fmt(t.product.seriesTitle, { name: seriesName }) : sectionName}
                 </span>
                 <span className="text-xl font-bold text-orange">{product.ip}</span>
               </p>
@@ -121,19 +131,19 @@ export default async function ProductPage({ params }: Props) {
               {product.description && <p className="mt-5 whitespace-pre-line leading-relaxed text-navy">{product.description}</p>}
 
               <div className="mt-8">
-                <Table head={["Overview", ""]} rows={overview} />
+                <Table head={[t.product.overview, ""]} rows={overview} />
               </div>
 
               <div className="mt-8 hidden gap-3 lg:flex">
-                <QuoteButton code={product.code} name={product.name} image={product.images[0]?.url} purposes={purposes} className="btn-primary flex-1 py-4" />
-                <ShareButton code={product.code} className="btn-secondary px-6 py-4" />
+                <QuoteButton {...quoteProps} label={t.product.requestQuote} className="btn-primary flex-1 py-4" />
+                <ShareButton {...shareProps} buttonText={t.product.share} className="btn-secondary px-6 py-4" />
               </div>
             </div>
           </div>
 
           {downloads.length > 0 && (
             <section className="mt-14">
-              <div className="bar">Console libraries</div>
+              <div className="bar">{t.product.consoleLibraries}</div>
               <ul className="mt-3 grid gap-3 sm:grid-cols-2">
                 {downloads.map(({ brand, file }) => (
                   <li key={brand.slug}>
@@ -161,7 +171,7 @@ export default async function ProductPage({ params }: Props) {
                       </span>
                       <span className="caps flex shrink-0 items-center gap-2 pr-1 text-[11px]">
                         <DownloadIcon width={20} height={20} />
-                        <span className="hidden sm:inline">Download</span>
+                        <span className="hidden sm:inline">{t.product.download}</span>
                       </span>
                     </a>
                   </li>
@@ -173,21 +183,24 @@ export default async function ProductPage({ params }: Props) {
           <div className="mt-14 grid gap-10 lg:grid-cols-[3fr_2fr]">
             <section>
               {product.specs.length > 0 ? (
-                <Table head={["Specification", "Value"]} rows={product.specs.map((s) => [s.label, s.value])} />
+                <Table
+                  head={[t.product.specification, t.product.value]}
+                  rows={product.specs.map((s) => [tSpec(lang, s.label), s.value])}
+                />
               ) : (
                 <>
-                  <div className="bar">Specification</div>
-                  <p className="px-3 py-3 text-grey">Full specifications available on request.</p>
+                  <div className="bar">{t.product.specification}</div>
+                  <p className="px-3 py-3 text-grey">{t.product.specsOnRequest}</p>
                 </>
               )}
             </section>
             {product.capabilities.length > 0 && (
               <section>
                 <Table
-                  head={["Feature", "Available"]}
+                  head={[t.product.feature, t.product.available]}
                   rows={product.capabilities.map((c) => [
-                    c.label,
-                    c.enabled ? <span className="font-bold text-navy">Yes</span> : <span className="text-grey">No</span>,
+                    tFeature(lang, c.label),
+                    c.enabled ? <span className="font-bold text-navy">{t.product.yes}</span> : <span className="text-grey">{t.product.no}</span>,
                   ])}
                 />
               </section>
@@ -197,12 +210,12 @@ export default async function ProductPage({ params }: Props) {
           {related.length > 0 && (
             <section className="mt-16">
               <div className="border-b border-navy pb-3">
-                <h2 className="text-3xl tracking-tight text-ink sm:text-4xl">More {product.section}</h2>
+                <h2 className="text-3xl tracking-tight text-ink sm:text-4xl">{fmt(t.product.more, { section: sectionName })}</h2>
               </div>
               <ul className="grid sm:grid-cols-2 lg:grid-cols-3">
                 {related.map((p) => (
                   <li key={p.id} className="border-b border-line">
-                    <Link href={`/p/${encodeURIComponent(p.code)}`} className="group flex items-center gap-4 py-4">
+                    <Link href={href(lang, `/p/${encodeURIComponent(p.code)}`)} className="group flex items-center gap-4 py-4">
                       <span className="flex h-20 w-28 shrink-0 items-center justify-center">
                         {p.images[0] && (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -225,12 +238,12 @@ export default async function ProductPage({ params }: Props) {
       {/* Fixed action bar on phones */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:hidden">
         <div className="mx-auto flex max-w-xl gap-2">
-          <QuoteButton code={product.code} name={product.name} image={product.images[0]?.url} purposes={purposes} className="btn-primary flex-1 py-3.5" />
-          <ShareButton code={product.code} className="btn-secondary px-4 py-3.5" compact />
+          <QuoteButton {...quoteProps} label={t.product.requestQuote} className="btn-primary flex-1 py-3.5" />
+          <ShareButton {...shareProps} className="btn-secondary px-4 py-3.5" compact />
         </div>
       </div>
 
-      <SiteFooter />
+      <SiteFooter lang={lang} />
     </>
   );
 }

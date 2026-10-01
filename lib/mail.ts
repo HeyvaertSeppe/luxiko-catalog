@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { config } from "./config";
+import { LOCALE_NAMES, fmt, getDict, tPurpose, type Locale } from "./i18n";
 
 export type QuoteMail = {
   productCode: string;
@@ -15,6 +16,7 @@ export type QuoteMail = {
   purpose: string;
   neededBy: string;
   message: string;
+  lang: Locale;
 };
 
 function esc(s: string) {
@@ -51,14 +53,14 @@ function row(label: string, value: string) {
     <td style="padding:6px 0;font-size:14px;font-weight:bold">${esc(value).replace(/\n/g, "<br>")}</td></tr>`;
 }
 
-function productBlock(q: QuoteMail) {
+function productBlock(q: QuoteMail, viewLabel: string) {
   return `<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#f7f8fb;border-radius:10px;margin:0 0 20px">
     <tr>
       ${q.imageUrl ? `<td style="padding:12px;width:110px"><img src="${esc(q.imageUrl)}" width="100" style="display:block;border-radius:8px;background:#fff"></td>` : ""}
       <td style="padding:12px">
         <div style="font-size:18px;font-weight:bold">${esc(q.productCode)}</div>
         <div style="color:${ORANGE};font-weight:bold;font-size:14px">${esc(q.productName)}</div>
-        <a href="${esc(q.productUrl)}" style="color:${NAVY};font-size:13px">View product page →</a>
+        <a href="${esc(q.productUrl)}" style="color:${NAVY};font-size:13px">${esc(viewLabel)}</a>
       </td>
     </tr></table>`;
 }
@@ -75,34 +77,39 @@ export async function sendQuoteMails(q: QuoteMail): Promise<boolean> {
   }
   const resend = new Resend(config.resendApiKey);
 
-  const details = `<table role="presentation" cellpadding="0" cellspacing="0">
-    ${row("Name", q.name)}${row("Company", q.company)}${row("E-mail", q.email)}${row("Phone", q.phone)}
-    ${row("Country", q.country)}${row("Quantity", String(q.quantity))}${row("Purpose", q.purpose)}
-    ${row("Needed by", q.neededBy)}${row("Message", q.message)}</table>`;
+  // The team always gets English; the customer gets the language of the website they used.
+  const details = (lang: Locale, extra = "") => {
+    const l = getDict(lang).mail.labels;
+    return `<table role="presentation" cellpadding="0" cellspacing="0">
+    ${row(l.name, q.name)}${row(l.company, q.company)}${row(l.email, q.email)}${row(l.phone, q.phone)}
+    ${row(l.country, q.country)}${row(l.quantity, String(q.quantity))}${row(l.purpose, q.purpose && tPurpose(lang, q.purpose))}
+    ${row(l.neededBy, q.neededBy)}${row(l.message, q.message)}${extra}</table>`;
+  };
 
   const internal = await resend.emails.send({
     from: config.mailFrom,
     to: config.quoteTo,
     replyTo: q.email,
     subject: `Quote request: ${q.quantity}× ${q.productCode} — ${q.company || q.name}`,
-    html: layout("New quote request", productBlock(q) + details),
+    html: layout("New quote request", productBlock(q, getDict("en").mail.viewProduct) + details("en", row("Language", LOCALE_NAMES[q.lang]))),
   });
   if (internal.error) {
     console.error("[luxiko] Resend error:", internal.error);
     return false;
   }
 
+  const t = getDict(q.lang).mail;
   const contact = [config.company.email, config.company.phone].filter(Boolean).join(" · ");
   const confirm = await resend.emails.send({
     from: config.mailFrom,
     to: q.email,
     replyTo: config.company.email || config.quoteTo[0],
-    subject: `We received your quote request for ${q.productCode}`,
+    subject: fmt(t.subject, { code: q.productCode }),
     html: layout(
-      `Thanks, ${q.name.split(" ")[0]}!`,
-      `<p style="font-size:15px;line-height:1.6;margin:0 0 20px">We received your request and will get back to you with a quote as soon as possible, usually within one business day.</p>
-       ${productBlock(q)}${details}
-       ${contact ? `<p style="font-size:13px;color:#6b7190;margin:20px 0 0">Questions? ${esc(contact)}</p>` : ""}`,
+      fmt(t.title, { name: q.name.split(" ")[0] }),
+      `<p style="font-size:15px;line-height:1.6;margin:0 0 20px">${esc(t.body)}</p>
+       ${productBlock(q, t.viewProduct)}${details(q.lang)}
+       ${contact ? `<p style="font-size:13px;color:#6b7190;margin:20px 0 0">${esc(fmt(t.questions, { contact }))}</p>` : ""}`,
     ),
   });
   if (confirm.error) console.error("[luxiko] Resend confirmation error:", confirm.error);
