@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* House style of the LUXIKO 2027 catalog: white pages, Open Sauce One,
+   letter-spaced League Spartan labels, navy bars and orange accents.
+   Flat and square — no rounded pills, shadows or gradients. */
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+  ::selection {
+    @apply bg-orange text-navy;
+  }
+  :focus-visible {
+    outline: 2px solid #f2ae1c;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Letter-spaced label, like "S E R I E S" in the catalog */
+  .caps {
+    @apply font-label font-bold uppercase tracking-[0.28em];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-label text-[13px] font-bold uppercase tracking-[0.2em]
+      transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-orange text-navy hover:bg-navy hover:text-white;
+  }
+  .btn-secondary {
+    @apply btn border border-navy bg-white text-navy hover:bg-navy hover:text-white;
+  }
+  .btn-danger {
+    @apply btn border border-danger bg-white text-danger hover:bg-danger hover:text-white;
+  }
+  /* Navy table header bar */
+  .bar {
+    @apply bg-navy px-3 py-2 font-label text-[11px] font-bold uppercase tracking-[0.28em] text-white;
+  }
+  .field {
+    @apply w-full border border-line bg-white px-3 py-2.5 text-base text-ink outline-none transition-colors placeholder:text-grey
+      focus:border-navy sm:text-sm;
+  }
+  .field-label {
+    @apply mb-1.5 block font-label text-[11px] font-bold uppercase tracking-[0.24em] text-grey;
+  }
+  .tag {
+    @apply inline-flex items-center gap-1.5 border border-line px-2 py-1 text-xs text-navy;
+  }
+  .panel {
+    @apply border border-line bg-white;
+  }
+}
+
+dialog::backdrop {
+  background: rgba(17, 17, 17, 0.55);
+}
