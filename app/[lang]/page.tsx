@@ -9,15 +9,17 @@ import { LOCALES, fmt, getDict, isLocale, tSection, tSeries } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ lang: string }> };
+type Props = { params: Promise<{ lang: string }>; searchParams?: Promise<Record<string, string | string[] | undefined>> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
   return { alternates: { languages: Object.fromEntries(LOCALES.map((l) => [l, `/${l}`])) } };
 }
 
-export default async function HomePage({ params }: Props) {
+export default async function HomePage({ params, searchParams }: Props) {
   const { lang } = await params;
+  const query = (await searchParams) ?? {};
+  const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)?.trim().toLowerCase() ?? "";
   if (!isLocale(lang)) notFound();
   const t = getDict(lang);
   const products = listProducts();
@@ -59,6 +61,9 @@ export default async function HomePage({ params }: Props) {
       </section>
       <main className="mx-auto max-w-6xl px-4 sm:px-6">
         <CatalogBrowser
+          // Deep links like ?section=Moving%20Heads&series=P open the catalog filtered.
+          initialSection={sections.find((s) => s.name.toLowerCase() === one(query.section))?.name ?? null}
+          initialSeries={(["B", "S", "P"] as const).find((x) => x.toLowerCase() === one(query.series)) ?? null}
           items={items}
           sections={sections}
           lang={lang}

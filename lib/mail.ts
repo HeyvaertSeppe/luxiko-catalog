@@ -115,3 +115,57 @@ export async function sendQuoteMails(q: QuoteMail): Promise<boolean> {
   if (confirm.error) console.error("[luxiko] Resend confirmation error:", confirm.error);
   return true;
 }
+
+export type ContactMail = {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  message: string;
+  lang: Locale;
+  page: string;
+};
+
+/** Message from the contact form on the main website. */
+export async function sendContactMails(m: ContactMail): Promise<boolean> {
+  if (!mailConfigured()) {
+    console.warn("[luxiko] RESEND_API_KEY / QUOTE_TO_EMAIL not set — message saved but no e-mail sent.");
+    return false;
+  }
+  const resend = new Resend(config.resendApiKey);
+  const details = (lang: Locale, extra = "") => {
+    const l = getDict(lang).mail.labels;
+    return `<table role="presentation" cellpadding="0" cellspacing="0">
+    ${row(l.name, m.name)}${row(l.company, m.company)}${row(l.email, m.email)}${row(l.phone, m.phone)}
+    ${row(l.message, m.message)}${extra}</table>`;
+  };
+
+  const internal = await resend.emails.send({
+    from: config.mailFrom,
+    to: config.quoteTo,
+    replyTo: m.email,
+    subject: `Website message — ${m.company || m.name}`,
+    html: layout("New message from the website", details("en", row("Language", LOCALE_NAMES[m.lang]) + row("Page", m.page))),
+  });
+  if (internal.error) {
+    console.error("[luxiko] Resend error:", internal.error);
+    return false;
+  }
+
+  const t = getDict(m.lang);
+  const contact = [config.company.email, config.company.phone].filter(Boolean).join(" · ");
+  const confirm = await resend.emails.send({
+    from: config.mailFrom,
+    to: m.email,
+    replyTo: config.company.email || config.quoteTo[0],
+    subject: t.contactMail.subject,
+    html: layout(
+      fmt(t.contactMail.title, { name: m.name.split(" ")[0] }),
+      `<p style="font-size:15px;line-height:1.6;margin:0 0 20px">${esc(t.contactMail.body)}</p>
+       ${details(m.lang)}
+       ${contact ? `<p style="font-size:13px;color:#6b7190;margin:20px 0 0">${esc(fmt(t.mail.questions, { contact }))}</p>` : ""}`,
+    ),
+  });
+  if (confirm.error) console.error("[luxiko] Resend confirmation error:", confirm.error);
+  return true;
+}

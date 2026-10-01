@@ -23,6 +23,12 @@ export const SETTINGS_GROUPS: SettingsGroup[] = [
         placeholder: "https://catalog.luxiko.be",
         help: "The address people use (your reverse proxy's domain). QR codes, share links, e-mails and Google sign-in use it. Regenerate the PDF after changing it.",
       },
+      {
+        key: "MAIN_SITE_URL",
+        label: "Main website address",
+        placeholder: "https://luxiko.be",
+        help: "The contact form on this website (with or without www.) may send messages through the catalog. They arrive like quote requests.",
+      },
     ],
   },
   {

@@ -41,16 +41,20 @@ export function CatalogBrowser({
   lang,
   t,
   series: seriesNames,
+  initialSection = null,
+  initialSeries = null,
 }: {
   items: CatalogItem[];
   sections: { name: string; label: string; count: number }[];
   lang: Locale;
   t: Dict["browser"];
   series: Record<"B" | "S" | "P", string>;
+  initialSection?: string | null;
+  initialSeries?: "B" | "S" | "P" | null;
 }) {
   const [query, setQuery] = useState("");
-  const [section, setSection] = useState<string | null>(null);
-  const [series, setSeries] = useState<string | null>(null);
+  const [section, setSection] = useState<string | null>(initialSection);
+  const [series, setSeries] = useState<string | null>(initialSeries);
   const [outdoor, setOutdoor] = useState(false);
   const q = useDeferredValue(query);
   const labelOf = useMemo(() => new Map(sections.map((s) => [s.name, s.label])), [sections]);

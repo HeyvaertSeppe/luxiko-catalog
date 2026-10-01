@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://luxiko.be/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://luxiko.be/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://luxiko.be/nl/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://luxiko.be/fr/"/>
+  </url>
+  <url>
+    <loc>https://luxiko.be/nl/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://luxiko.be/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://luxiko.be/nl/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://luxiko.be/fr/"/>
+  </url>
+  <url>
+    <loc>https://luxiko.be/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://luxiko.be/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://luxiko.be/nl/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://luxiko.be/fr/"/>
+  </url>
+</urlset>

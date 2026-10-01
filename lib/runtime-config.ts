@@ -24,6 +24,7 @@ export function configFile() {
 
 export const SETTING_KEYS = [
   "SITE_URL",
+  "MAIN_SITE_URL",
   "AUTH_SECRET",
   "GOOGLE_CLIENT_ID",
   "GOOGLE_CLIENT_SECRET",
@@ -44,6 +45,7 @@ export const SECRET_KEYS: SettingKey[] = ["AUTH_SECRET", "GOOGLE_CLIENT_SECRET",
 
 export const DEFAULTS: Partial<Record<SettingKey, string>> = {
   SITE_URL: "https://catalog.luxiko.be",
+  MAIN_SITE_URL: "https://luxiko.be",
   COMPANY_NAME: "LUXIKO",
 };
 

@@ -288,7 +288,8 @@ The website is in **English, Dutch and French**: `/en/…`, `/nl/…`, `/fr/…`
 
 ```
 app/                  Next.js pages and API routes
-  p/[code]/           product page
+  [lang]/             public pages per language (/en, /nl, /fr)
+  [lang]/p/[code]/    product page
   s/[slug]/           short-link redirect
   admin/              admin (login + panel)
   api/                quote, share, auth, settings and admin endpoints
@@ -299,4 +300,9 @@ docker/entrypoint.sh  prepares the data volume, then drops root privileges
 seed/                 products + photos extracted from the original PDF
 scripts/              PDF builder and admin password reset
 tools/                one-off extractor for the original PDF (Python)
+website/              the main website for luxiko.be (static, upload to FastPanel)
 ```
+
+## Main website (luxiko.be)
+
+The `website/` folder has a separate static website for your main domain. It has the same look, three languages, animations, a link to the catalog and a button to shop.luxiko.be. Upload the contents of `website/public_html` to FastPanel. Its contact form sends through this catalog, so set **Admin → Settings → Main website address**. See [website/README.md](website/README.md).

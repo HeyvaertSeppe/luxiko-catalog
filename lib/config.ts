@@ -16,6 +16,9 @@ export const config = {
   get siteUrl() {
     return getSetting("SITE_URL").replace(/\/+$/, "");
   },
+  get mainSiteUrl() {
+    return getSetting("MAIN_SITE_URL").replace(/\/+$/, "");
+  },
   get authSecret() {
     return getSetting("AUTH_SECRET");
   },

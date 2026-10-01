@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://luxiko.be/sitemap.xml

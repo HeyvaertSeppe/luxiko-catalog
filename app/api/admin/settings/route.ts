@@ -16,8 +16,8 @@ const emailList = line(1000).refine(
   "Use valid e-mail addresses, separated by commas",
 );
 
-const rules: Record<string, z.ZodType<string>> = {
-  SITE_URL: line(200).refine((v) => {
+const siteUrl = (example: string) =>
+  line(200).refine((v) => {
     if (v === "") return true;
     try {
       const u = new URL(v);
@@ -25,7 +25,11 @@ const rules: Record<string, z.ZodType<string>> = {
     } catch {
       return false;
     }
-  }, "Enter a full address like https://catalog.luxiko.be"),
+  }, `Enter a full address like ${example}`);
+
+const rules: Record<string, z.ZodType<string>> = {
+  SITE_URL: siteUrl("https://catalog.luxiko.be"),
+  MAIN_SITE_URL: siteUrl("https://luxiko.be"),
   RESEND_API_KEY: line(200).refine((v) => v === "" || /^\S+$/.test(v), "API keys contain no spaces"),
   MAIL_FROM: line(200).refine(
     (v) => v === "" || email.safeParse(v).success || /^[^<>]{1,100}<[^<>\s]+@[^<>\s]+>$/.test(v),

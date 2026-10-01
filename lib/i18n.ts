@@ -98,6 +98,7 @@ const en = {
     chooseOption: "Please choose one of the listed options",
     checkForm: "Please check the form",
     unknownProduct: "Unknown product",
+    messageRequired: "Please write a short message",
   },
   share: {
     title: "Open on your computer",
@@ -137,6 +138,12 @@ const en = {
       neededBy: "Needed by",
       message: "Message",
     },
+  },
+  contactMail: {
+    subject: "We received your message",
+    title: "Thanks, {name}!",
+    body: "We received your message and will get back to you as soon as possible, usually within one business day.",
+    yourMessage: "Your message",
   },
 };
 
@@ -231,6 +238,7 @@ const nl: Dict = {
     chooseOption: "Kies een van de opties",
     checkForm: "Controleer het formulier",
     unknownProduct: "Onbekend product",
+    messageRequired: "Schrijf een kort bericht",
   },
   share: {
     title: "Openen op je computer",
@@ -270,6 +278,12 @@ const nl: Dict = {
       neededBy: "Nodig tegen",
       message: "Bericht",
     },
+  },
+  contactMail: {
+    subject: "We hebben je bericht ontvangen",
+    title: "Bedankt, {name}!",
+    body: "We hebben je bericht goed ontvangen en nemen zo snel mogelijk contact met je op, meestal binnen één werkdag.",
+    yourMessage: "Je bericht",
   },
 };
 
@@ -362,6 +376,7 @@ const fr: Dict = {
     chooseOption: "Veuillez choisir une des options",
     checkForm: "Veuillez vérifier le formulaire",
     unknownProduct: "Produit inconnu",
+    messageRequired: "Veuillez écrire un court message",
   },
   share: {
     title: "Ouvrir sur votre ordinateur",
@@ -401,6 +416,12 @@ const fr: Dict = {
       neededBy: "Pour le",
       message: "Message",
     },
+  },
+  contactMail: {
+    subject: "Nous avons bien reçu votre message",
+    title: "Merci, {name} !",
+    body: "Nous avons bien reçu votre message et revenons vers vous au plus vite, en général sous un jour ouvrable.",
+    yourMessage: "Votre message",
   },
 };
 

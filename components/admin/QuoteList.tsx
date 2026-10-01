@@ -43,7 +43,7 @@ export function QuoteList({ rows: initial }: { rows: QuoteRow[] }) {
   }
 
   if (!rows.length) {
-    return <div className="panel mt-6 p-10 text-center text-grey">No quote requests yet. They will appear here as soon as someone uses the quote button.</div>;
+    return <div className="panel mt-6 p-10 text-center text-grey">No quote requests yet. They will appear here as soon as someone uses the quote button or the contact form on the main website.</div>;
   }
 
   return (
@@ -54,7 +54,7 @@ export function QuoteList({ rows: initial }: { rows: QuoteRow[] }) {
             <span className={`w-20 shrink-0 px-2 py-1 text-center text-[10px] font-bold uppercase ${STATUS[q.status] ?? STATUS.lost}`}>{q.status}</span>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-semibold text-ink">
-                {q.quantity}× {q.productCode} <span className="font-normal text-grey">— {q.company || q.name}</span>
+                {q.productCode ? `${q.quantity}× ${q.productCode}` : "Website message"} <span className="font-normal text-grey">— {q.company || q.name}</span>
               </span>
               <span className="block truncate text-xs text-grey">{q.email} · {new Date(q.createdAt.replace(" ", "T") + "Z").toLocaleString()}</span>
             </span>
@@ -83,7 +83,7 @@ export function QuoteList({ rows: initial }: { rows: QuoteRow[] }) {
               </dl>
               {q.message && <p className="mt-3 whitespace-pre-line bg-zebra p-3 text-sm text-ink">{q.message}</p>}
               <div className="mt-4 flex flex-wrap items-center gap-2">
-                <a className="btn-primary px-4 py-2" href={`mailto:${q.email}?subject=${encodeURIComponent(`Your LUXIKO quote for ${q.productCode}`)}`}>Reply by e-mail</a>
+                <a className="btn-primary px-4 py-2" href={`mailto:${q.email}?subject=${encodeURIComponent(q.productCode ? `Your LUXIKO quote for ${q.productCode}` : "Your message to LUXIKO")}`}>Reply by e-mail</a>
                 {q.phone && <a className="btn-secondary px-4 py-2" href={`tel:${q.phone.replace(/\s+/g, "")}`}>Call</a>}
                 {q.productId && <Link className="btn-secondary px-4 py-2" href={`/admin/products/${q.productId}`}>Open product</Link>}
                 <select value={q.status} onChange={(e) => setStatus(q.id, e.target.value)} className="field ml-auto w-auto py-2">
