@@ -86,28 +86,42 @@ The default address is **`https://catalog.luxiko.be`**. Your reverse proxy must 
 
 ### FastPanel / nginx (catalog.luxiko.be)
 
-A ready-made, tested config is in **[`deploy/nginx-catalog.luxiko.be.conf`](deploy/nginx-catalog.luxiko.be.conf)**. It already contains your IPs (`10.1.2.222` → `10.1.3.245:3000`) and certificate paths. Compared with FastPanel's default config, it:
+A ready-made, tested config is in **[`deploy/nginx-catalog.luxiko.be.conf`](deploy/nginx-catalog.luxiko.be.conf)**. It already contains your IPs (`10.1.2.222` → `10.1.3.245:3000`) and certificate paths. It:
 
-- removes the `root` folder and the `location ~* \.(jpg|…|css|js…)$` block that tries to serve files from disk
-- sends the `X-Forwarded-Host` / `X-Forwarded-Proto` headers the app needs
+- sends **everything** to the app, and protects the app's paths (`/_next/`, `/files/`, `/brand/`, `/api/`) with `location ^~`. That way FastPanel's "static files" rules, which nginx otherwise prefers, can never take over.
+- passes the real visitor IP from Cloudflare (`CF-Connecting-IP`) and the HTTPS headers the app needs
 - redirects HTTP to HTTPS
 - allows uploads up to 60 MB
-- caches `/_next/static/` for a year
 
-To apply it in FastPanel:
+To apply it:
 
-1. In the site's settings, set it to proxy everything to `http://10.1.3.245:3000`, and **turn off "serve static files with nginx"**.
-2. Or replace the site's nginx config with the file above. Check and reload with `nginx -t && systemctl reload nginx`.
+1. In FastPanel, open the site settings and **turn off static file handling** ("serve static files with nginx").
+2. Put the config in place: replace the site's nginx config, or paste it in FastPanel's config editor.
+3. Check and reload:
+   ```bash
+   nginx -t && systemctl reload nginx
+   ```
+4. **Cloudflare:**
+   - set *SSL/TLS → Overview* to **Full** (or *Full (strict)* with a valid certificate)
+   - run *Caching → Configuration → Purge Everything*
+   - turn off *Rocket Loader*
 
-If pages still look unstyled, test where it breaks. Run these on the nginx server:
+#### Error 520 / page without CSS or JS
+
+When the page loads but CSS, JS and images fail with **520**, Cloudflare received an empty or broken reply from nginx for those files. Almost always that's an nginx rule for file extensions (`location ~* \.(js|css|png…)$`) serving them from a local folder instead of the app. Find out where it breaks by running these on the nginx server:
 
 ```bash
-curl -sI http://10.1.3.245:3000/ | head -1                         # app directly → HTTP/1.1 200
-CSS=$(curl -s https://catalog.luxiko.be/ | grep -o '/_next/static/css/[^"]*' | head -1)
-curl -sI "https://catalog.luxiko.be$CSS" | head -3                 # must be 200 + text/css
+# 1) the app itself (must be 200)
+curl -sI http://10.1.3.245:3000/brand/icon.png | head -1
+
+# 2) nginx directly, skipping Cloudflare (must be 200)
+curl -skI --resolve catalog.luxiko.be:443:10.1.2.222 https://catalog.luxiko.be/brand/icon.png | head -1
+
+# 3) which rule matches: any regex for js/css/png that is not in the config above?
+nginx -T 2>/dev/null | grep -n "location ~" | grep -iE "js|css|png"
 ```
 
-Then reload the browser with **Ctrl+F5** to clear cached files.
+If (1) works and (2) doesn't, nginx is the problem: remove the extension rule that (3) shows, or make sure you're using the config above. If (1) and (2) work but the browser still gets 520, purge the Cloudflare cache and check *SSL/TLS* is set to **Full**.
 
 ### Other proxies
 
